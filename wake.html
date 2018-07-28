@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>"Wake"</title>
+<head>
+<body onresize="checkScreen()">
+	<div id="div">
+		<h1 id="title" align="center">"Wake"</h1>
+		<p id="gameText"></p>
+		<div id="inputDiv">
+			<input id="userInput" autofocus placeholder="Enter commands here..."></input>
+			<button type="button" onclick="enter()">Enter</button>
+		</div>
+	</div>
+	
+	<style>
+
+		@font-face {
+			font-family: misc;
+			src: url(miscfs.ttf);
+		}
+		
+        body {
+            background-color: #0d0d0d;
+            color: #66ccff;
+			font-family: misc;
+        }
+		#div {
+			margin: 0 auto;
+			border-style: solid;
+			border-width: 2px;
+			padding: 10px;
+			
+		}
+        
+        #gameText {
+            text-decoration-color: aliceblue;
+        }
+		
+		#inputDiv {
+			border-style: solid;
+			border-width: 2px;
+			padding: 5px;
+		}
+		
+		input {
+			width: 80%;
+			margin: 0;
+			background-color: #0d0d0d;
+			color: #66ccff;
+			font-family: misc;
+			border-color: #66ccff;
+			padding: 2px;
+		}
+		
+		::placeholder {
+			color: #66ccff;
+			opacity: 0.5;
+		}
+		
+		button {
+			padding: 1px;
+			margin: 0;
+			float: right;
+			margin-left: 0;
+			color: #66ccff;
+			background-color: black;
+			font-family: misc;
+			border-color: #66ccff;
+		}
+	</style>
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="wake.js"></script>
+</body>
+</html>
