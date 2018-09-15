@@ -11,7 +11,7 @@
 		<h1 id="title" align="center">"Wake"</h1>
 		<p id="gameText"></p>
 		<div id="inputDiv">
-			<input id="userInput" autofocus placeholder="Enter commands here..."></input>
+			<input id="userInput" autofocus placeholder="Enter commands here..." onkeydown="pressEnter(event)"></input>
 			<button type="button" onclick="enter()">Enter</button>
 		</div>
 	</div>
@@ -80,7 +80,7 @@
 			border-color: #66ccff;
 		}
 	</style>
-	<script src="jquery-3.3.1.min.js"></script>
+	<script src="defaultMap.js"></script>
 	<script src="wake.js"></script>
 </body>
 </html>
