@@ -221,7 +221,7 @@ function list() {
 	<li>inventory, inv, i : display inventory</li> \
 	<li>get, g, take : add item to inventory</li> \
 	<li>drop, d : remove item from inventory</li> \
-	<li>unlock : unlock target</li> \
+	<li>unlock : unlock target (<b>[unlock] [name of exit], e.g. 'unlock east'</b>)</li> \
 	<li>read : read message from target</li> \
 	<li>eat : eat item from inventory</li> \
 	<li>[targets]</li> \
