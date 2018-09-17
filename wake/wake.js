@@ -386,28 +386,35 @@ function read(item) {
 	return "You can't read that.";
 }
 
+function getAll() {
+	
+		var got = "";
+		var i = 0;
+		//check if room contains anything obtainable
+		while (i < thisRoom.items.length) { //<-- this is where 'get all' is failing
+			//check if obtainable
+			if (thisRoom.items[i].obtainable === false) {
+				i++;
+				continue;
+			} else {
+				got += thisRoom.items[i].name + " ";
+				getItem(thisRoom.items[i].name);
+			}
+		}
+		if (got === "") {
+			return "There is nothing to pick up here.";
+		}
+		return "Got " + got;
+}
+
 function getItem(item) {
 	if (item == undefined) {
 		return "Get what?";
 	}
 	//check for "all" target
 	if (item == "all") {
-		var got = "";
-		var i = 0;
-		while (i < thisRoom.items.length) { //<-- this is where 'get all' is failing
-			//check if obtainable
-			if (thisRoom.items[i].obtainable === false) {
-				i++;
-				out(i); //remove after debugging
-				continue;
-			}
-			//got += thisRoom.items[i][name] + " ";
-			//out("got " + i); //remove after debugging
-			//getItem(thisRoom.items[i][name]);
-			}
-		return "Got " + got;
+		return getAll();
 	}
-	
 	//if item is in current room
 	i = 0;
 	while (i < thisRoom.items.length) {

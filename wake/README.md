@@ -7,10 +7,13 @@ So far a player can move around with commands like "n" or "north", and can revie
 Player can also look at, pick up, and drop items.  Exits can be locked and require a key to unlock before exiting.
 <p>
 Todo:<br />
--locked doors are only locked one-way.
+-enable run game and exit commands to switch games
+-refactor get and drop to use query and for in loops
+-add support for displaying multi-word item names
+-locked doors are only locked one-way; fix this
 -rewrite tokenize() to use query (will save a lot of repetitive code)
 -return error if no gamefile found (do I really need to do this? maybe not)
--list function for determining grammar (commas and spaces, oxford comma and)
+-list function for determining grammar (commas and spaces, oxford comma and) (or modify existing one!)
 -use 
 	use machine checks the machine and searches for reasonable verbs (flip, use, activate, throw, turn)
 -interactables (considering calling these machines; they are items with states and/or behaviors, e.g. lightswitch.)<br />
@@ -80,6 +83,10 @@ Future commands:<br />
 look at, get, take, drop, go, use, inv/inventory/i, 
 
 Updates:
+
+sep 16th, 2018
+-FIXED GET ALL!!!
+-split "all" check in get to it's own function, getAll()
 
 sep 15th, 2018
 -drop all returns error if inv is empty
