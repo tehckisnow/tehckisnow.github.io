@@ -59,8 +59,10 @@ function listNames(array) {
 	x = 0;
 	while (x < array.length) {
 		elementsList += array[x].name;
-		if (!(x === array.length - 1)) {
-			elementsList += " ";
+		if (array.length > 1 && x === array.length - 2){
+			elementsList += ", and ";
+		} else if (!(x === array.length - 1)) {
+			elementsList += ", ";
 		}
 		x++;
 	}
