@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>"Woah"</title>
+</head>
+<body id="gameScreen" onload="load()" onkeydown="pressKey(event)">
+  <div>
+    <p id="loading">Loading...</p>
+    <img id="image" src="0.png">
+    <map>
+        <area id="left" shape="rect" onclick="turnLeft()">
+        <area id="right" shape="rect" onclick="turnRight()">
+        <area id="forward" shape="rect" onclick="forward()">
+    </map>
+  </div>
+  <p id="text"></p>
+  <p>Click on the edges of the screen, or <br />press the arrow keys, or<br />use WASD.</p>
+  <style>
+    p {
+        color: white;
+    }
+    img {
+    padding: 20;
+    display: block;
+    margin: 0 auto;
+    max-height: 100%;
+    max-width: 100%;
+    }
+    body {
+        background-color: black;
+    }
+    #loading {
+        color: white;
+        text-align: center;
+        padding: 70px;
+    }
+    #left {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 10%;
+        height: 100%;
+        opacity: 0;
+        display: "none";
+    }
+    #right {
+        position: absolute;
+        right:0px;
+        top:0px;
+        width: 10%;
+        height: 100%;
+        opacity: 0;
+        display: "none";
+    }
+    #forward {
+        position: absolute;
+        right:40%;
+        top:20%;
+        width:20%;
+        height:30%;
+        background-color: rgba(256,256,256,.3);
+        opacity: 0;
+        display: "none";
+    }
+    #left:hover {
+        background-color: rgba(256,256,256,.3);
+        opacity: 1;
+    }
+    #right:hover {
+        background-color: rgba(256,256,256,.3);
+        opacity: 1;
+    }
+    #forward:hover {
+        background-color: rgba(256,256,256,.3);
+        opacity: 1;
+    }
+    #gameScreen {
+        
+    }
+  </style>
+  <script src="explore.js"></script>
+</body>
+</html>
