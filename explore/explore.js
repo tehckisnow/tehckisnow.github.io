@@ -1,7 +1,6 @@
 //first person pre-rendered adventure game like myst
 
 //todo:
-//enter instead of click to start
 //change l/r controls to iterate through an array(so that SE can work)
 //          choose whether turnL will look at 
 //"views", click on a thing and see a closeup, read a note, ect.  disable nav?

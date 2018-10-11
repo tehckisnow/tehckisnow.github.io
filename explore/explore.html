@@ -4,7 +4,7 @@
   <title>"Woah"</title>
 </head>
 <body id="gameScreen" onload="load()" onkeydown="pressKey(event)">
-  <div>
+  <div id="main">
     <p id="loading">Loading...</p>
     <img id="image" src="0.png">
     <map>
@@ -28,6 +28,10 @@
     }
     body {
         background-color: black;
+    }
+    #main {
+        position: relative;
+        
     }
     #loading {
         color: white;
@@ -55,9 +59,9 @@
     #forward {
         position: absolute;
         right:40%;
-        top:20%;
+        top:30%;
         width:20%;
-        height:30%;
+        height:50%;
         background-color: rgba(256,256,256,.3);
         opacity: 0;
         display: "none";
