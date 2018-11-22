@@ -26,8 +26,6 @@ var player;
 let facing = 'right';
 var cursors;
 var ground, bg, carrots;
-var text;
-var moveMode = 'ground';
 var keyW;
 var keyA;
 var keyS;
@@ -42,6 +40,13 @@ function preload(){
 
   this.load.image("tiles", "assets/bun tileset.png");
   this.load.tilemapTiledJSON("map", "assets/bunno map.json");
+}
+
+function collectCarrot(sprite, tile){
+  carrots.removeTileAt(tile.x, tile.y);
+  //score++;
+  text.setText('score: ' + score);
+  return false;
 }
 
 function create(){
@@ -100,18 +105,11 @@ this.anims.create({
   repeat: -1
 });
 
-function collectCarrot(sprite, tile){
-  carrots.removeTileAt(tile.x, tile.y);
-  score ++;
-  text.setText('score: ' + score);
-  return false;
-}
-
-//physics collider
+//physics colliders
 this.physics.add.collider(player, ground);
 
 carrots.setTileIndexCallback(14, collectCarrot, this);
-this.physics.add.overlap(player, carrots);
+this.physics.add.overlap(player, carrots, collectCarrot);
 
 //controls
 cursors = this.input.keyboard.createCursorKeys();
