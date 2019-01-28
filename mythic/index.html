@@ -1,0 +1,134 @@
+<html>
+  <head>
+    <title>Mythic</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <div id="main">
+
+      <h1>Mythic GME:</h1>
+
+      <div id="navbar" class="horz">
+        <a href="#oracle">Oracle</a>
+        <a href="#journal">Journal</button>
+        <a href="#notes">Notes</button>
+        <a href="#characters">Characters</button>
+        <a href="#creatures">Creatures</a>
+        <a href="#locations">Locations</a>
+        <a href="#dice">Dice</a>
+        <a href="#threads">Threads</a>
+        <button id="navtogglemenu" onclick="toggle('menu')">Menu</button>
+      </div>
+
+      <div id="menu">
+        <div class="horz">
+          <button id="fullbutton" onclick="fullscreen()">fullscreen</button>
+          <button onclick="toggle('menu')">x</button>
+        </div>
+        <p>show:</p>
+        <div class="horz">
+          <input type="checkbox" checked onclick="toggle('oracle')">Oracle
+        </div>
+        <div class="horz">
+          <input type="checkbox" checked onclick="toggle('journal')">Journal
+        </div>
+        <div class="horz">
+          <input type="checkbox" checked onclick="toggle('notes')">Notes
+        </div>
+        <div class="horz">
+          <input type="checkbox" checked onclick="toggle('characters')">Characters
+        </div>
+        <div class="horz">
+          <input type="checkbox" checked onclick="toggle('creatures')">Creatures
+        </div>
+        <div class="horz">
+          <input type="checkbox" checked onclick="toggle('locations')">Locations
+        </div>
+        <div class="horz">
+          <input type="checkbox" checked onclick="toggle('dice')">Dice
+        </div>
+        <div class="horz">
+          <input type="checkbox" checked onclick="toggle('threads')">Threads
+        </div>
+        <button>Import</button>
+        <button>Export</button>
+        Module Width:<input id="widthslider" type="range" min="25" max="100" defaultValue="45">
+        <button onclick="resize()">set</button>
+      </div>
+
+      <div id="modules">
+
+        <div id="oracle" class="module">
+          <h2>Oracle</h2>
+          <p>Question:</p>
+          <input id="question">
+          <p>Odds:</p>
+          <div class="horz">
+            <button class="odds" onclick="mroll(10)">impossible<br>(10%)</button>
+            <button class="odds" onclick="mroll(25)">unlikely<br>(25%)</button>
+            <button class="odds" onclick="mroll(50)">50/50<br>(50%)</button>
+            <button class="odds" onclick="mroll(75)">probably<br>(75%)</button>
+            <button class="odds" onclick="mroll(90)">almost certain<br>(90%)</button>
+          </div>
+          <br>
+          <button onclick="complex()">Complex Question</button>
+          <p>Result:</p>
+          <div class="horz">
+            <p id="oracleoutput">[Output]</p>
+            <button id="send" onclick="send('oracleoutput')">-></button>
+          </div>
+        </div>
+
+        <div id="journal" class="module">
+          <h2>Journal</h2>
+          <textarea id="journaltextarea"></textarea>
+        </div>
+
+        <div id="notes" class="module">
+          <h2>Notes</h2>
+          <textarea></textarea>
+        </div>
+
+        <div id="characters" class="module">
+          <h2>Characters</h2>
+          <button id="newcharacterbutton" style="float:left" onclick="newCharacter()">New</button>
+          <textarea id="characterstextarea">Characters:</textarea>
+        </div>
+
+        <div id="creatures" class="module">
+          <h2>Creatures</h2>
+          <button id="newcreaturebutton" style="float:left" onclick="newCreature()">New</button>
+          <textarea id="creaturestextarea">Creatures:</textarea>
+        </div>
+
+        <div id="locations" class="module">
+          <h2>Location</h2>
+          <div class="horz" style="flex-wrap:nowrap">
+            <textarea class="loc" id="loc_region">Regions:</textarea>
+            <textarea class="loc" id="loc_encounter">Encounters:</textarea>
+            <textarea class="loc" id="loc_item">Items:</textarea>
+          </div>
+        </div>
+
+        <div id="dice" class="module">
+          <h2>Dice</h2>
+          <button onclick="roll(20)">D20</button>
+          <p id="diceoutput">[Result]</p>
+          <button onclick="send('diceoutput')">-></button>
+        </div>
+
+        <div id="threads" class="module">
+          <h2>Threads</h2>
+            <div>
+              <input id="thread_input" onkeypress="enter(event, 'thread')">
+              <button id="thread_add" onclick="newThread('thread')">+</button>
+              <button id="thread_clear" onclick="clearAllThreads('thread')">x clear</button>
+            </div>
+        </div>
+
+      </div>
+
+    </div>
+  </body>
+</html>
