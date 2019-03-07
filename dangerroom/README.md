@@ -11,3 +11,15 @@
     // average combo length
     // max combo length
 // create better recordings
+
+
+Future features:
+  choose from a selection of fighting styles
+    This adjusts what attacks/commands are issued (no kicks in boxing, etc.)
+  choose from multiple recorded voices
+  evasions/defenses/maneuvers (can toggle whether to mix these in or not)
+  graphical redesign
+  instructional animations
+  bootup animation
+  tweak more features in settings
+  progression program

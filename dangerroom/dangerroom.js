@@ -11,7 +11,7 @@ let trainer = {
   restInterval: {},
   attackName: "",
   timeBetweenAttacks: 200, //200ms
-  timeBetweenCombos: 1000, //1000ms?
+  timeBetweenCombos: 600, //1000ms?
   maxNumberInCombo: 4,
   minNumberInCombo: 1,
   currentCombo: 0,
