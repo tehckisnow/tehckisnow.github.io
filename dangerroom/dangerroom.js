@@ -10,8 +10,8 @@ let trainer = {
   interval: {},
   restInterval: {},
   attackName: "",
-  timeBetweenAttacks: 200, //200ms
-  timeBetweenCombos: 600, //1000ms?
+  timeBetweenAttacks: 400, //200ms
+  timeBetweenCombos: 2000, //1000ms?
   maxNumberInCombo: 4,
   minNumberInCombo: 1,
   currentCombo: 0,
@@ -23,6 +23,27 @@ let trainer = {
   sfx: [],
   resting: "ready",
   restTimer: 0,
+  mobile: false,
+
+  toggleMobile: function(){
+    if(!trainer.mobile){
+      trainer.mobile = true;
+      document.getElementById("maindiv").style.width = "auto";
+      document.body.style.fontSize = "5vh";
+      document.getElementById("pause").style.fontSize = "5vh";
+      document.getElementById("resume").style.fontSize = "5vh";
+      document.getElementById("stop").style.fontSize = "5vh";
+      document.getElementById("go").style.fontSize = "20vh";
+    }else{
+      trainer.mobile = false;
+      document.getElementById("maindiv").style.width = "50%";
+      document.body.style.fontSize = "2vh";
+      document.getElementById("pause").style.fontSize = "2vh";
+      document.getElementById("resume").style.fontSize = "2vh";
+      document.getElementById("stop").style.fontSize = "2vh";
+      document.getElementById("go").style.fontSize = "2vh";
+    }
+  },
 
   populateAttacks: function(){
     //sfx
@@ -49,22 +70,25 @@ let trainer = {
   },
 
   combo: function(){
-    if(trainer.readyForCombo){
-      trainer.currentCombo--;
-      if(trainer.currentCombo < 0){
+    
+    if(trainer.currentCombo < 0){
+      if(trainer.readyForCombo){
         trainer.currentCombo = trainer.getRandomInt(trainer.minNumberInCombo, trainer.maxNumberInCombo);
+        //trainer.currentCombo = Math.round(Math.random() * trainer.maxNumberInCombo) + 1;
         console.log("attacks in this combo: " + trainer.currentCombo);
         trainer.readyForCombo = false;
-        setTimeout(function(){trainer.readyForCombo = true}, trainer.timeBetweenCombos);
-      }else{
+        function ready(){trainer.readyForCombo = true;};
+        setTimeout(function(){ready()}, trainer.timeBetweenCombos);
+      }
+    }else{
         //call attack
         trainer.callAttack();
-      }
     }
   },
 
   callAttack: function(){
     if(trainer.readyForAttack){
+      trainer.currentCombo--;
       trainer.readyForAttack = false;
       //choose random attack
       let num = Math.floor(Math.random() * trainer.attacks.length);
@@ -167,7 +191,6 @@ let trainer = {
   },
 
   loop: function(){
-    console.log(trainer.state);
     if(trainer.state === "default"){
       clearInterval(trainer.interval);
       //show settings

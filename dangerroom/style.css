@@ -1,11 +1,13 @@
 body {
   font-family: 'Orbitron', sans-serif;
+  font-size: 5vh;
   background-color: #222222;
   color: lightblue;
   text-align: center;
 }
 h1 {
   color: red;
+  margin: 0;
 }
 
 div {
@@ -16,6 +18,7 @@ div {
 }
 select {
   font-family: 'Orbitron', sans-serif;
+  font-size: 5vh;
   color: lightblue;
   background-color: #222222;
   border-color: lightblue;
@@ -23,20 +26,21 @@ select {
 button {
   padding: 20px;
   font-family: 'Orbitron', sans-serif;
+  font-size: 20vh;
   color: lightblue;
   background-color: #222222;
   outline-color: lightblue;
   border-color: lightblue;
 }
 #maindiv {
-  width: 50%;
+  
   margin: auto;
   border-style: double;
   border-color: lightblue;
   border-width: 5px;
 }
 #clockRemaining {
-  font-size: 30px;
+  font-size: 10vh;
 }
 #go {
   margin-top: 30px;
@@ -46,6 +50,13 @@ button {
   border: none;
 }
 #timeRemaining {
-  font-size: 70px;
+  font-size: 20vh;
   margin: 0;
+}
+#mobile {
+  font-size: 10px;
+  padding: 5px;
+  position: absolute;
+  right: 30px;
+  top: 30px;
 }
