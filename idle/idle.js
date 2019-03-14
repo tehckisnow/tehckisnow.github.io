@@ -8,7 +8,7 @@ let autoClickFrequency = 5;
 
 let resources = 0;
 let unitName = "r";
-let increasePerClick = 100; //starts at 1!
+let increasePerClick = 1; //starts at 1!
 let inventory = [];
 let resourcesToUnlockShop = 10;
 
