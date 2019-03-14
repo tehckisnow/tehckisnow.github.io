@@ -1,0 +1,42 @@
+body {
+  background-color: black;
+  color: white;
+  margin: auto;
+  width: 50%;
+  text-align: center;
+  padding: 20px;
+}
+h1 {
+  margin: auto;
+}
+h2 {
+  margin: auto;
+}
+button {
+  color: white;
+  background-color: black;
+  display: block;
+  margin: auto;
+}
+div {
+  border: solid white;
+  color: white;
+  margin: auto;
+  padding: 10px;
+}
+button {
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+h1, h2 {
+  margin: 20px;
+  margin-top: 5px;
+}
+.label {
+  display: inline;
+  margin: 20px;
+}
+#inv {
+  display: none;
+}
