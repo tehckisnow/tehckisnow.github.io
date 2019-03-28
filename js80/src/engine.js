@@ -359,10 +359,10 @@ let js80 = {
   },
 
   //draw tilesheet to screen based on tilemap
-  map: function(map, tilesheet, tilesize){
+  map: function(map, tilesheet, tilesize, xOffset, yOffset){
     engine.draw.beginPath();
-    let x = 0;
-    let y = 0;
+    x = xOffset || 0;
+    y = yOffset || 0;
     let numberOfRows = tilesheet.naturalWidth / tilesize || tilesheet.tilesize;
     let currentRow;
     let currentTile;
@@ -374,7 +374,7 @@ let js80 = {
         engine.draw.drawImage(tilesheet, currentTile * tilesize, currentRow * tilesize, tilesize, tilesize, x * tilesize, y * tilesize, tilesize, tilesize);
         x++;
       }
-      x = 0;
+      x = xOffset;
       y++;
     }
   },
