@@ -7,6 +7,9 @@ So far a player can move around with commands like "n" or "north", and can revie
 Player can also look at, pick up, and drop items.  Exits can be locked and require a key to unlock before exiting.
 <p>
 Todo:<br />
+-help three times triggers hint system and link to walkthrough
+-triggers: function in regular loop checks for triggers when entering a room or USEing an object.
+	checks trigger: property in room if triggered by room, in item if triggered by item. triggers can change states for other objects by modifying properties to change.
 -enable run game and exit commands to switch games
 -refactor get and drop to use query and for in loops
 -add support for displaying multi-word item names
@@ -19,7 +22,6 @@ Todo:<br />
 -interactables (considering calling these machines; they are items with states and/or behaviors, e.g. lightswitch.)<br />
 -adjective property would allow multiple objects(silver key, bronze key). tokenize would also check adjective parameter for valid keywords<br />
 -typos with look (like "look cion") return the room description as if target was not there.
--get ALL command<br />
 -build enclosures for global variables<br />
 -up arrow command history<br />
 -make more object-oriented? (would reduce repeated code and allow for default settings)<br />
@@ -34,7 +36,7 @@ Todo:<br />
 -organize items in their own global array and sort by itemID? (likely make sorting, finding, and managing inventory easier, may make map less readable)<br />
 -command checker checks all exit names in map? (would help for doors)(that's probably unecessary, maybe stratify exits to a master list, like with items)<br />
 -seperate responces ("There doesn't seem to be an exit there.") into a master response list so they can be customized for a given game
--improve onResize
+-improve onResize (especially important for mobile version!)
 -upon entering a room, check it's visited property and set to true if undefined.  use description for the first time entering a room and briefDesc for each time after<br />
 -lock command?
 -doors in addition to exits?
@@ -83,6 +85,12 @@ Future commands:<br />
 look at, get, take, drop, go, use, inv/inventory/i, 
 
 Updates:
+
+may 24th, 2019
+-fixed articles on item lists
+
+sep 17th, 2018
+-use will now display an item's trigger.message(more functions planned later)
 
 sep 16th, 2018
 -FIXED GET ALL!!!

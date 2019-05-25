@@ -54,12 +54,18 @@ function out(text) {
 
 //return a list of names seperated by spaces from the array passed in
 //horizontal, for things like listItems() and listExits().
-function listNames(array) {
+function listNames(array, articles) {
 	var elementsList = "";
 	x = 0;
 	while (x < array.length) {
+		//this is prepending exits, too.  fix
+		if(articles){
+			elementsList += setArticle(array[x].name);
+		};
 		elementsList += array[x].name;
-		if (array.length > 1 && x === array.length - 2){
+		if (array.length === 2 && x < 1){
+			elementsList += " and ";
+		}else if (array.length > 1 && x === array.length - 2){
 			elementsList += ", and ";
 		} else if (!(x === array.length - 1)) {
 			elementsList += ", ";
@@ -69,18 +75,28 @@ function listNames(array) {
 	return elementsList;
 }//listNames()
 
+function setArticle(word){
+  if(word[0] === "a" || word[0] === "e" || word[0] === "i" || word[0] === "o" || word[0] === "u"){
+    return "an ";
+  }else{
+    return "a ";
+  }
+};
+
 //return a list of the names of items in the current room if there are any
 function listItems() {
 	if (thisRoom.items.length > 0) {
-		return "You can see <b>" + listNames(thisRoom.items) + "</b> here. ";//space at end is intentional
+		return "You can see <b>" + listNames(thisRoom.items, true) + "</b> here. ";//space at end is intentional
 	}
 	return "";
 }//listItems()
 
 //return a list of names of exits in the current room if there are any
 function listExits() {
-	if (thisRoom.exits.length > 0) {
-		return "There are exits to the <b>" + listNames(thisRoom.exits) + "</b>.";
+	if(thisRoom.exits.length > 1){
+    return "There are exits to the <b>" + listNames(thisRoom.exits) + "</b>.";
+  }else if (thisRoom.exits.length > 0) {
+		return "There is an exit to the <b>" + listNames(thisRoom.exits) + "</b>.";
 	}
 	return "";
 }//listExits()
@@ -112,6 +128,19 @@ function updateRoomInfo() {
 //search an iterable (array) for an object with valueOfX: propertyX and return propertyY
 //if propertyY is left out, returns the object found, or -1 if not.
 function query(iterable, propertyX, valueOfX, propertyY) {			 
+	//if propertyY is undefined
+		//iterates through iterable 
+			//checks if propertyX exists on current element
+				//returns current element if so
+				//returns -1 if not
+	//else if propertyY is defined			
+	//iterates through iterable
+		//checks if propertyX exists on current element
+			//returns propertyY of current element if so
+			//returns undefined if not
+		//returns undefined if not  
+			
+	
 	if (propertyY === undefined) {
 		for (let x of iterable) {		
 			if (x[propertyX] == valueOfX) {
@@ -125,7 +154,7 @@ function query(iterable, propertyX, valueOfX, propertyY) {
 			return x[propertyY];
 		} 
 	}
-};
+};  // query_name, query_description
 
 function checkGo(exitName) {
 	if (query(thisRoom.exits, "name", exitName, "name")) {
@@ -145,7 +174,10 @@ function checkGo(exitName) {
 
 //split user input into an array and save only recognized commands into array
 function tokenize(originalInput) {
-	var commandsList = ["help", "l", "look", "examine", "x", "n", "north", "s", "south", "e", "east", "w", "west", "inventory", "inv", "i", "g", "get", "take", "d", "drop", "test", "reset", "debug", "tp", "me", "self", "room", "unlock", "list", "all", "eat", "read"];
+	var commandsList = ["help", "l", "look", "examine", "x", "n", "north", "s", 
+	"south", "e", "east", "w", "west", "inventory", "inv", "i", "g", "get", "take", 
+	"d", "drop", "test", "reset", "debug", "tp", "me", "self", "room", "unlock", 
+	"list", "all", "eat", "read", "use"];
 	//split into array
 	var tokenizedInput = originalInput.split(" ");
 	//loop through array and only save recognized commands to finalizedCommand[finalCommandIndex]
@@ -223,9 +255,10 @@ function list() {
 	<li>inventory, inv, i : display inventory</li> \
 	<li>get, g, take : add item to inventory</li> \
 	<li>drop, d : remove item from inventory</li> \
-	<li>unlock : unlock target (<b>[unlock] [name of exit], e.g. 'unlock east'</b>)</li> \
+	<li>unlock : unlock target</li> \
 	<li>read : read message from target</li> \
 	<li>eat : eat item from inventory</li> \
+	<li>use : use an item</li> \
 	<li>[targets]</li> \
 	<ul> \
 	<li>me : used as a target for the look command</li> \
@@ -307,6 +340,9 @@ function command(input) {
 				return "I don't think you really want to do that.";
 			}
 			break;
+		case "use":
+			return use(tokens[1]);
+			break;
 		case "reset":
 			reset();
 			return updateRoomInfo();
@@ -340,6 +376,17 @@ function command(input) {
 			}
 	}
 };
+
+function use(item) {
+	if (item === undefined) {
+		return "Use what?";
+	}
+	if (query(player.inventory, "name", item, "trigger") !== undefined) {
+		return query(player.inventory, "name", item, "trigger").message;
+	} else {
+		return "I'm not sure what you are trying to do with that.";
+	}
+}
 
 function unlock(target){
 		if (query(thisRoom.exits, "name", target, "locked")) {
@@ -389,6 +436,23 @@ function read(item) {
 }
 
 function getAll() {
+	var got = "";
+	for (i in thisRoom.items) {
+		if (thisRoom.items[i].obtainable === false) {
+			
+		} else {
+			got += thisRoom.items[i].name + " ";
+			getItem(thisRoom.items[i].name);
+		}
+	}
+	if (got === "") {
+		return "There is nothing to pick up here.";
+	}
+	return "Got " + got;
+}
+
+/*
+function getAll() {
 	
 		var got = "";
 		var i = 0;
@@ -408,7 +472,28 @@ function getAll() {
 		}
 		return "Got " + got;
 }
-
+*/
+function getItem(item) {
+	if (item == undefined) {
+		return "Get what?";
+	}
+	//check for "all" target
+	if (item == "all") {
+		return getAll();
+	}
+	for (i in thisRoom.items) {
+		if (thisRoom.items[i].name == item) {
+			if (thisRoom.items[i].obtainable == false) {
+				return "You can't pick that up.";
+			}
+			player.inventory.push(thisRoom.items[i]);
+			thisRoom.items.splice(i, 1);
+			return "Got " + item + ".";
+		}
+	}
+	return "You don't see that here.";
+}
+/*
 function getItem(item) {
 	if (item == undefined) {
 		return "Get what?";
@@ -418,8 +503,7 @@ function getItem(item) {
 		return getAll();
 	}
 	//if item is in current room
-	i = 0;
-	while (i < thisRoom.items.length) {
+	i = 	while (i < thisRoom.items.length) {
 		if (thisRoom.items[i] && thisRoom.items[i].name == item) {
 			//check if obtainable
 			if (thisRoom.items[i].obtainable == false) {
@@ -436,6 +520,7 @@ function getItem(item) {
 	return "You don't see that here";
 	
 };
+*/
 
 //consider refactoring to use if(item == undefined && player.inventory[i].name == item) like getItem()
 function dropItem(item) {
