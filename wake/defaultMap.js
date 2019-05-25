@@ -46,6 +46,9 @@ var map = {
 			name: "Stone room", 
 			briefDesc: "This stone room contains a large stone fountain. There is a light coming from the south.",
 			description: "The large bricks of this room are a cold, rough stone. A large decorative water fountain emits the sound of running water. A warm light is coming from the south.",
+			trigger: {
+				message: "A harsh wind blows through the room."
+			},
 			exits: [
 				{
 				name: "north",
@@ -60,6 +63,13 @@ var map = {
 				name: "fountain",
 				description: "An ornate water fountain composed of a variety of elaborately detailed statues. The sound of water trickling down it's various surfaces fills the room.",
 				obtainable: false
+				},
+				{
+					name: "container",
+					description: "a small metal container.",
+					obtainable: true,
+					state: "closed",
+					contents: [{name: "pill", description: "a small green pill.", obtainable: true, edible: true}],
 				}]
 		},
 		
@@ -75,7 +85,10 @@ var map = {
 				{
 				name: "east",
 				destination: 4,
-				locked: true,
+				doorName: "wooden",
+				description: "an old wooden door covered in ancient scratches",
+				//locked: true,
+				state: "locked",
 				keyID: 1203
 				},
 				{
@@ -86,7 +99,10 @@ var map = {
 			items: [
 				{
 				name: "pen",
-				description: "a small silver writing pen."
+				description: "a small silver writing pen.",
+				trigger: {
+					message: "You click the pen, cycling the mechanism revealing and hiding it's writing tip."
+				}
 				}
 			]
 		}, 

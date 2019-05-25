@@ -7,7 +7,15 @@ So far a player can move around with commands like "n" or "north", and can revie
 Player can also look at, pick up, and drop items.  Exits can be locked and require a key to unlock before exiting.
 <p>
 Todo:<br />
--help three times triggers hint system and link to walkthrough
+-doors: open, close, lock and unlock<br />
+-"look at wooden door" <br />
+-"look south"<br />
+-containers<br />
+-switches/triggers<br />
+-history(last 3 commands?) <br />
+
+<br />
+//-help three times triggers hint system and link to walkthrough
 -triggers: function in regular loop checks for triggers when entering a room or USEing an object.
 	checks trigger: property in room if triggered by room, in item if triggered by item. triggers can change states for other objects by modifying properties to change.
 -enable run game and exit commands to switch games
@@ -82,9 +90,14 @@ numbers (for tp)<br />
 	
 
 Future commands:<br />
-look at, get, take, drop, go, use, inv/inventory/i, 
 
 Updates:
+
+may 25th, 2019
+-added DOORS! (can be opened, closed, locked, and unlocked)
+-added history (press up and down to view past commands)
+-removed lots of zombie code
+-lots of small fixes
 
 may 24th, 2019
 -fixed articles on item lists
