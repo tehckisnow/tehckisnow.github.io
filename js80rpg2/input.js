@@ -1,32 +1,28 @@
 let distance = 16;
 
 function convertDirection(dir){
-  let x = 0;
-  let y = 0;
+  let dirObject = {x: 0, y: 0};
   switch(dir){
     case "up":
-      y = -1;
+      dirObject.y = -1;
       break; 
     case "down":
-      y = 1;//!
+      dirObject.y = 1;
       break; 
     case "left":
-      x = -1;
+      dirObject.x = -1;
       break; 
     case "right":
-      x = 1;//!
+      dirObject.x = 1;
       break; 
     default:
   };
-  let dirObject = {};
-  dirObject.x = x;
-  dirObject.y = y;
   return dirObject;
 };//convertDirection()
 
 //return an object with x/y points for the center of the tile they are facing
 function getPoint(dir, tileSize){
-  let unit = tileSize / 2;
+  let unit = Math.floor(tileSize / 2);
   switch(dir){
     case "up":
       return {x: unit, y: -unit};
@@ -42,123 +38,96 @@ function getPoint(dir, tileSize){
   };
 };//getPoint()
 
-function collisionTest(map, layer, entity, dir, group){
+function collisionTest(map, layer, entity, dir, group, tag){
   let direction = getPoint(dir, 16);
-  if(engine.collision.checkPoint(entity.x + direction.x, entity.y + direction.y, group, "physical")){return true};
-  let position = player1.getPosition();
+  if(engine.collision.checkPoint(entity.x + direction.x, entity.y + direction.y, group, tag)){return true};
+  let position = camera.position.get(player1);
   if(engine.collision.checkCollisionLayer(map, layer, position.x + direction.x, position.y + direction.y)){return true};
   return false;
 };//collision()
 
 function step(entity, dir, distance){
-  if(collisionTest(currentMap.assets[0], 1, entity, dir, collidableEntities)){return};
-
-  //if(runModifier = 1){distance = distance / 2}
-
+  if(collisionTest(game1.scenes.current.map.current.assets[0], 4, entity, dir, game1.scenes.current.collision.entities, "physical")){return};
   inputManager.setMode(steppingMode);
   entity.justFinished = true;
   entity.distanceRemaining = distance;
   function check(){
     if(entity.distanceRemaining > 0){
       entity.distanceRemaining--;
-      move(entity, dir);
-      timerManager.timer(1, function(){check()});
+      let direction = convertDirection(dir);
+      entity.x += direction.x;
+      entity.y += direction.y;
+      game1.scenes.current.timer.manager.timer(1, function(){check()});
     }else if(entity.justFinished){
       entity.justFinished = false;
       inputManager.setMode(playMode);
       let center = getPoint("center", 16);
-      checkExit(currentMap, 2, -currentMap.x + player1.x + center.x, -currentMap.y + player1.y + center.y);
+      let currentMap = game1.scenes.current.map.current;
+      checkExit(game1, currentMap, 3, player1.x + center.x, player1.y + center.y, -16);
+      //checkMapEvents();
     };
   };
   check();
 };//step()
 
-function move(entity, dir, distance){
-    let direction = convertDirection(dir);
-    let x = direction.x;
-    let y = direction.y;
-    moveWorld(x, y, entitiesToMove);
-  //};
-};//move()
-
-function moveWorld(x, y, entities){
-  //!replace this later!
-  let things = [currentMap];
-  for(i in entities){
-    things.push(entities[i]);
-  };
-  for(buh in things){
-    //! changed these to negative for tile-based movement
-    things[buh].x += -x + runModifier;
-    things[buh].y += -y + runModifier;
-  };
-};
-
 let inputManager = engine.input.newManager(game1);
+game1.input = inputManager;
 let playMode = inputManager.newMode("play");
 let steppingMode = inputManager.newMode("stepping");
+
+let introMode = inputManager.newMode("intro");
+introMode.newKey("Enter", function(){skip()});
+inputManager.setMode(introMode);
+let startMode = inputManager.newMode("start");
+startMode.newKey("Enter", function(){
+  //fade to black
+  introFade.start("black", 100, 1);
+  game1.scenes.current.timer.manager.timer(110, function(){
+    scene1.setActive();
+    game1.scenes.setCurrent(scene1);
+    titleScene.setInactive();
+    inputManager.setMode(playMode);
+    //fade from black
+    scene1Fade.start("black", 100, -1);
+  });
+
+});
 
 let readMode = inputManager.newMode("read");
 readMode.newKey(" ", function(){
   //advance the textbox
   dialogue.advance(inputManager, playMode);
+  //!the above line sets game to playMode when textbox closes! this will mess up cutscenes
 });
-
-playMode.newKey("Shift", function(){}, false);
 
 playMode.newKey("a", function(){
   player1.facing = "left";
   player1.animation.setAnim("walkLeft");
-  //movement
   step(player1, "left", distance);
-  //move(player1, "left", distance);
 }, true);
 playMode.newKey("d", function(){
   player1.facing = "right";
   player1.animation.setAnim("walkRight");
-  //movement
   step(player1, "right", distance);
-  //move(player1, "right", distance);
 }, true);
 playMode.newKey("w", function(){
   player1.facing = "up";
   player1.animation.setAnim("walkUp");
-  //movement
   step(player1, "up", distance);
-  //move(player1, "up", distance);
 }, true);
 playMode.newKey("s", function(){
   player1.facing = "down";
   player1.animation.setAnim("walkDown");
-  //movement
   step(player1, "down", distance);
-  //move(player1, "down", distance);
 }, true);
 playMode.newKey(" ", function(){
   //check map for interaction
   let dir = getPoint(player1.facing, 16);
-  let pos = player1.getPosition();
-  talk(player1.x + dir.x, player1.y + dir.y, generatedNpcs);
-  inspectMapObject(pos.x + dir.x, pos.y + dir.y, mapAsset, 2);
+  checkMapDescription(game1.scenes.current.map.current, 3, player1.x + dir.x, player1.y + dir.y);
+  checkMapEvents(game1.scenes.current.map.current, 3, player1.x + dir.x, player1.y + dir.y);  
+  checkNpcs(generatedNpcs, player1.x + dir.x, player1.y + dir.y, "physical");
 }, false);
 
 playMode.noKey(function(){
-  
-  runModifier = 0;
-
-  let anim = "";
-  switch(player1.facing){
-    case "up":
-      anim = "idleUp";
-      break;
-    case "left":
-      anim = "idleLeft";
-      break;
-    case "right":
-      anim = "idleRight";
-      break;
-    default:
-      anim = "idleDown";
-  };
-  player1.animation.setAnim(anim);
+  player1.behavior.idle();
 });

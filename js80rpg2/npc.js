@@ -11,6 +11,7 @@ let npc = {
     //npc.npcId = npc.nextId++;
     npc.dialogue = dialogueArray;
     npc.dialogueLine = 0;
+    npc.interaction = function(){console.log("npc interaction")};
     npc.width = 16;
     npc.height = 16;
     npc.facing = "down";
@@ -38,7 +39,23 @@ let npc = {
         npc.facing = dir;
         npc.animation.setAnim("idle" + dir); //! dir capitalization
       },
-      idle: function(){},
+      idle: function(){
+          let anim = "";
+          switch(npc.facing){
+            case "up":
+              anim = "idleUp";
+              break;
+            case "left":
+              anim = "idleLeft";
+              break;
+            case "right":
+              anim = "idleRight";
+              break;
+            default:
+              anim = "idleDown";
+          };
+          npc.animation.setAnim(anim);
+      },
       step: function(){},
       follow: function(){},
       wander: function(){},

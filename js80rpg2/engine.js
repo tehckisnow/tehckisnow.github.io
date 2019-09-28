@@ -65,10 +65,18 @@ const engine = {
         new: function(){
           return engine.scenes.new(game);
         },
+        current: {},
+        setCurrent: function(scene){game.scenes.current = scene},
         active: [],
         inactive: [],
       },
+      save: {
+        //!
+
+      },
+      input: {update: function(){}},
       update: function(){
+        game.input.update();
         engine.update(game.scenes.active);
       },
     };
@@ -85,11 +93,7 @@ const engine = {
   },//newGame()
   update: function(scenes){
     for(i in scenes){
-      let systems = scenes[i].parent.settings.systemOrder;
-      for(u in systems){
-        //! the following line needs a test confirm it has the component
-        engine[systems[u]].update(scenes[i].entities);
-      };
+      scenes[i].update();
     };
   },//update()
 
@@ -114,6 +118,7 @@ const engine = {
         setInactive: function(){
           if(newScene.parent.scenes.inactive.indexOf(newScene) < 0){
             newScene.parent.scenes.inactive.push(newScene);
+            newScene.audio.manager.stop();
             newScene.active = false;
             let index = newScene.parent.scenes.active.indexOf(newScene);
             index > -1 ? newScene.parent.scenes.active.splice(index, 1) : 1;
@@ -126,7 +131,95 @@ const engine = {
           newScene.entities.push(entity);
           return entity;
         },
-
+        //events
+        events: {
+          events: [],
+          expired: [],
+          triggers: [],
+          new: function(trigger, effect){
+            let event = {};
+            event.trigger = trigger;
+            event.effect = effect;
+            newScene.events.events.push(event);
+            return event;
+          },
+          pullTrigger: function(trigger){
+            newScene.events.triggers.push(trigger);
+          },
+          check: function(trigger){
+            for(i in newScene.events.events){
+              if(newScene.events.events[i].trigger === trigger){
+                newScene.events.events[i].effect();
+                newScene.events.expired.push(i);
+              };
+            };
+            for(u in newScene.events.expired){
+              newScene.events.events.splice(newScene.events.expired[u], 1);
+            };
+            newScene.events.expired = [];
+          },
+        },
+        //animation
+        animation: {
+          entities: [],
+          update: function(){
+            engine.animation.update(newScene.animation.entities);
+          },
+        },
+        //render
+        render: {
+          entities: [],
+          update: function(){
+            engine.render.update(newScene.parent, newScene.render.entities);
+          },
+        },
+        //collision
+        collision: {
+          entities: [],
+          update: function(){},//!is there any need for this?
+        },
+        //timer
+        timer: {
+          manager: engine.timer.newManager(),
+        },
+        //map
+        map: {
+          current: {},
+          setCurrent: function(map){newScene.map.current = map},
+          getCurrent: function(){return newScene.map.current},
+        },
+        audio: {
+          manager: engine.audio.newController(),
+        },
+        ui: {
+          manager: engine.ui.newManager(game),
+        },
+        //update scene
+        update: function(){
+          //events
+          for(i in newScene.events.triggers){
+            newScene.events.check(newScene.events.triggers[i]);
+          };
+          newScene.events.triggers = [];
+          //timers
+          newScene.timer.manager.update();
+          //map?
+          //collision?
+          newScene.animation.update();
+          newScene.frame();
+          if(newScene.camera){
+            newScene.camera.update();
+            //!this may allow possibility of wrong scene updating camera
+          }else{
+            engine.render.update(newScene.parent, newScene.render.entities);
+          };
+          //newScene.effects.manager.update();
+          newScene.ui.manager.update();
+          //newScene.effects.fade.update();
+          //engine.render.update(newScene.parent, newScene.render.entities);
+        },
+        //called every frame; used for developer input
+        frame: function(){},
       };
       game.scenes.inactive.push(newScene);
       return newScene;
@@ -160,18 +253,22 @@ const engine = {
             let render = engine.render.new(scene, type, ...args);
             render.parent = newEntity;
             newEntity.render = render;
+            scene.render.entities.push(newEntity);
+            engine.render.sort(scene.render.entities);
             return render;
           },
           camera: function(scene, ...args){},
           animation: function(...args){
             let animation = engine.animation.new(...args);
             animation.parent = newEntity;
+            scene.animation.entities.push(newEntity);
             newEntity.animation = animation;
             return animation;
           },
           collision: function(scene, ...args){
             let collision = engine.collision.new(...args);
             collision.parent = newEntity;
+            scene.collision.entities.push(newEntity);
             newEntity.collision = collision;
             return collision;
           },
@@ -239,6 +336,33 @@ const engine = {
       newSpriteSheet.sprites = engine.assets.genSprites(newSpriteSheet);
       return newSpriteSheet;
     },
+    //consolidates map object properties that are in Tiled map format into a simple object
+    getMapProperties: function(mapObject){
+      let properties = {};
+      for(i in mapObject.properties){
+        properties[mapObject.properties[i].name] = mapObject.properties[i].value;
+      };
+      properties.x = mapObject.x; 
+      properties.y = mapObject.y;      
+      properties.width = mapObject.width; properties.height = mapObject.height;
+      return properties;
+    },
+    //pass a mapEntity, layer index, and x/y coordinates and it will return the first object
+    //if property has a value, an entity will only be returned if that value is defined
+    //if value has a value, an entity will only be returned if it's property's value matches this value
+    checkMapObject: function(map, layer, x, y, property, value){
+      let obj = map.assets[0].layers[layer].mget(x, y);
+      if(value !== undefined){
+        if(obj[property] === value){
+          return obj;
+        }else {return false};
+      }else if(property !== undefined){
+        if(obj[property] !== undefined){
+          return obj;
+        }else {return false};
+      };
+      return obj;
+    },
     map: function(scene, mapData, width, tileSet, collideLayer, TiledOffset){
       let newMap = {
         type: "map",
@@ -252,25 +376,74 @@ const engine = {
       newMap.tileheight = tileSet.tileSize;
       newMap.tilewidth = tileSet.tileSize;
       newMap.width = width; //width in tiles
+      newMap.checkMapObject = function(layer, x, y, property, value){
+        return newMap.layers[layer].checkMapObject(x, y, property, value);
+      },
       newMap.mget = function(x, y, layer){
         return newMap.layers[layer].mget(x, y);
       };//mget()
       for(i in mapData.layers){
         if(mapData.layers[i].type === "objectgroup"){
-          newMap.layers.push({name: mapData.layers[i].name, type: "objectgroup", objects: mapData.layers[i].objects});
+          let nextLayer = engine.assets.mapObjectLayer(mapData.layers[i].name, mapData.layers[i].objects);
+          nextLayer.parent = newMap;
+          nextLayer.layer = newMap.layers.length || 0;
+          newMap.layers.push(nextLayer);
         }else{
-          newMap.layers.push(engine.assets.mapLayer(mapData.layers[i].name, mapData.layers[i].data, newMap.width, mapData.layers[i].visible, "tilelayer", newMap.tileset));
+          let nextLayer = engine.assets.mapTileLayer(mapData.layers[i].name, mapData.layers[i].data, newMap.width, mapData.layers[i].visible, "tilelayer", newMap.tileset);
+          nextLayer.parent = newMap;
+          nextLayer.layer = newMap.layers.length || 0;
+          newMap.layers.push(nextLayer);          
         };
       };
       return newMap;
     },
-    mapLayer: function(name, data, width, visible, type, tileSet){
+    mapObjectLayer: function(name, objects){
+      let newLayer = {};
+      newLayer.name = name;
+      newLayer.type = "objectgroup";
+      //objects
+      newLayer.objects = [];
+      for(i in objects){
+        newLayer.objects.push(engine.assets.getMapProperties(objects[i]));
+      };
+      newLayer.checkMapObject = function(x, y, property, value){
+        return engine.assets.checkMapObject(newLayer.parent.parent, newLayer.layer, x, y, property, value);
+      },
+      newLayer.mget = function(x, y){
+        //!
+        y = y + 16; //!!!!!!!!!!!!!!!!!!!!!!!!
+        for(g in newLayer.objects){
+          if(newLayer.objects[g].x < x && newLayer.objects[g].x + newLayer.objects[g].width > x && newLayer.objects[g].y < y && newLayer.objects[g].y + newLayer.objects[g].height > y){
+            return newLayer.objects[g];
+          };//else {return false};
+        };
+        return false;
+      };
+      //search layer for first object with property = value
+      //returns first object with property if value is not specified
+      newLayer.findProperty = function(property, value){
+        for(f in newLayer.objects){
+          if(value){
+            if(newLayer.objects[f][property] === value){
+              return newLayer.objects[f];
+            };
+          }else{
+            if(newLayer.objects[f][property]){
+              return newLayer.objects[f];
+            };
+          };
+        };
+      };
+      return newLayer;
+    },
+    //!remove type; it is unneeded
+    mapTileLayer: function(name, data, width, visible, type, tileSet){
       let newLayer = {};
       if(type === "tilelayer"){
         newLayer.name = name;
         newLayer.data = data;
         newLayer.width = width;
-        newLayer.visible = visible || true;
+        newLayer.visible = visible;
         newLayer.type = "tilelayer";
         newLayer.tileSet = tileSet;
 
@@ -302,6 +475,9 @@ const engine = {
       newComponent.xOffset = xOffset || 0;
       newComponent.yOffset = yOffset || 0;
       newComponent.zOffset = zOffset || 0;
+      newComponent.flipH = 1;
+      newComponent.flipV = 1;
+      newComponent.visible = true;
       return newComponent;
     },
     //manually draw an image to the screen
@@ -309,7 +485,8 @@ const engine = {
       game.settings.canvas.ctx.drawImage(image, x || 0, y || 0);
     },
     //manually draw a sprite from a spritesheet to the screen
-    spr: function(game, spriteSheet, spr, x, y){
+    spr: function(game, spriteSheet, spr, x, y, flipH, flipV){
+      //if(flipH !== undefined){game.settings.canvas.ctx.scale(flipH, flipV)};
       game.settings.canvas.ctx.drawImage(
         spriteSheet,
         spriteSheet.sprites[spr].x,
@@ -323,13 +500,13 @@ const engine = {
       );
     },
     //render a map entity
-    map: function(game, mapEntity){
+    map: function(game, mapEntity, xOff, yOff, zOff){
       let xOffset = mapEntity.render.xOffset;
       let yOffset = mapEntity.render.yOffset;
       let zOffset = mapEntity.render.zOffset;
-      let x = mapEntity.x;
-      let y = mapEntity.y;
-      let z = mapEntity.z;
+      let x = mapEntity.x + (xOff || 0);
+      let y = mapEntity.y + (yOff || 0);
+      let z = mapEntity.z + (zOff || 0);
 
       //! the following will find first map asset.  this could cause problems if there are multiple.
       let map;
@@ -431,38 +608,74 @@ const engine = {
       game.canvas.ctx.strokeText(text || "", x || 0, y || 0);
     },
 
-    //! This is just taken from a previous version and has not been adapted
     camera: {
-      x: 0,
-      y: 0,
-      z: 0,
-      follow: function(target, xOffset, yOffset, zOffset){
-        if(!target){
-          target = {x: 0, y: 0, z: 0};
+      new: function(scene){
+        let camera = {
+          scene: scene,
+          game: scene.parent,
+          x: 0,
+          y: 0,
+          z: 0,
+          following: "none",
+          xOffset: 0, yOffset: 0, zOffset: 0,//used for following
+          position: {
+            //translate between screen and map coordinates
+            get: function(entity){
+              let map = scene.map.current;
+              return {x: -map.x + entity.x, y: -map.y + entity.y};
+            },
+            set: function(entity, x, y){
+              entity.x = -x + entity.x;
+              entity.y = -y + entity.y;
+            },
+          },
+          pan: function(x, y, speed, duration){},
+          follow: function(target, xOffset, yOffset, zOffset){
+            if(!target){
+              camera.x = 0; camera.y = 0; camera.z = 100;
+            }else{
+              camera.following = target;
+              camera.xOffset = xOffset;
+              camera.yOffset = yOffset;
+              camera.zOffset = zOffset;
+              camera.x = target.x + (xOffset || 0);
+              camera.y = target.y + (yOffset || 0);
+              camera.z = target.z + (zOffset || 0);
+            };
+          },
+          //if you want to use camera controls, call this instead of engine.render.all()
+          update: function(){
+            if(camera.following !== "none"){
+              camera.follow(camera.following, camera.xOffset, camera.yOffset, camera.zOffset);
+            };
+            engine.render.update(camera.game, camera.scene.render.entities, -camera.x, -camera.y);
+          },
         };
-        this.x = target.x + (xOffset || 0);
-        this.y = target.y + (yOffset || 0);
-        this.z = target.z + (zOffset || 0);
+        camera.scene.camera = camera;
+        return camera;
       },
-      //if you want to use camera controls, call this instead of engine.render.all()
-      update: function(){
-        engine.render.all(-this.x, -this.y);
-      },
-    },
+    },//camera
 
+    sort: function(collection){
+      //sort by z-axis
+      collection.sort(function(a, b){return a.z - b.z});
+
+    },
     //pass an array of entities with render components to draw all of them to the screen
-    update: function(game, collection){
+    update: function(game, collection, xOffset, yOffset){
+      engine.render.cls(game, game.settings.defaultBgColor);
       for(i in collection){
         let current = collection[i];
+        if(!current.render.visible){continue};
         switch(current.render.type){
           case "image":
-            engine.render.image(game, current.render.asset, current.x, current.y);
+            engine.render.image(game, current.render.asset, current.x + (xOffset || 0), current.y + (yOffset || 0));
             break;
           case "sprite":
-            engine.render.spr(game, current.render.asset, current.render.sprite, current.x, current.y);
+            engine.render.spr(game, current.render.asset, current.render.sprite, current.x + (xOffset || 0), current.y + (yOffset || 0), current.render.flipH, current.render.flipV);
             break;
           case "map":
-            engine.render.map(game, current);
+            engine.render.map(game, current, current.x + (xOffset || 0), current.y + (yOffset || 0));
             break;
           default:
             console.log("render.type not found for ", collection[i]);
@@ -607,16 +820,12 @@ const engine = {
   timer: {
     newManager: function(){
       let clock = {
-        //time: 0,
         timers: [],
         expired: [],
-        //check: function(){return clock.time},
         update: function(){
-          clock.time++;
           for(i in clock.timers){
             if(!clock.timers[i].expired){
               clock.timers[i].time--;
-                //if(clock.check() >= clock.timers[i].time + clock.timers[i].started){
                 if(clock.timers[i].time < 0){
                   clock.timers[i].effect();
                   clock.timers[i].expired = true;
@@ -624,7 +833,6 @@ const engine = {
               };
             };
           };
-          //toRemove
           function remove(element){
             return element.expired === false;
           };
@@ -634,7 +842,6 @@ const engine = {
         timer: function(time, effect){
           let timer = {};
           timer.expired = false;
-          //timer.started = clock.check();
           timer.time = time;
           timer.effect = effect || function(){};
           clock.timers.push(timer);
@@ -726,6 +933,7 @@ const engine = {
       return sequence;
     },
     //wait: function(){},
+    //!
     wait: function(num){return {time: num}},
   },//sequence
 
@@ -812,6 +1020,7 @@ const engine = {
         setMode: function(mode){
           inputManager.modeToSet = mode;
         },
+        update: function(){engine.input.update(inputManager)},
       };
       document.body.setAttribute("onkeydown", "inputManager.keyDown(event)");
       document.body.setAttribute("onkeyup", "inputManager.keyUp(event)");
@@ -839,33 +1048,47 @@ const engine = {
 
   //ui system
   ui: {
-    //new: function(scene, type, ...args){},
-    textbox: {
-      newController: function(game, theme){
-        let newController = {};
-        newController.game = game;
-        newController.textboxes = [];
-        newController.defaultTheme = theme;
-        newController.new = function(text, theme, mods){
-          let textbox = engine.ui.textbox.new(text, theme, mods);
-          textbox.controller = newController;
-          newController.textboxes.push(textbox);
-          return textbox;
-        };
-        newController.update = function(){
-          for(i in newController.textboxes){
-            engine.ui.textbox.draw(newController.game, newController.textboxes[i]);
+    newManager: function(game){
+      let manager = {
+        game: game,
+        themes: [],
+        defaultTheme: {},
+        setDefaultTheme: function(theme){manager.defaultTheme = theme},
+        newTheme: function(settingsObject){},
+        elements: [],
+        textbox: {
+          new: function(text, theme, mods){
+            let textbox = engine.ui.textbox.new(text, theme, mods);
+            textbox.manager = manager;
+            manager.elements.push(textbox);
+            return textbox;
+          },
+        },
+        menu: {
+          new: function(){
+            let menu = engine.ui.menu.new();
+            menu.manager = manager;
+            manager.elements.push(menu);
+            return menu;
+          },
+        },
+        effect: {
+          new: function(type, game, ...args){
+            let effect = engine.ui.effects[type](game, ...args);
+            effect.manager = manager;
+            manager.elements.push(effect);
+            return effect;
+          },
+        },
+        update: function(){
+          for(i in manager.elements){
+            manager.elements[i].update(manager.game, manager.elements[i]);
           };
-        };
-        //set the text of a certain textbox and call it's open function
-        //defaults to first textbox if not specified
-        newController.write = function(text, textbox){
-          tbox = textbox || newController.textboxes[0];
-          tbox.open(text);
-        };
-
-        return newController;
-      },
+        },
+      };
+      return manager;
+    },//newManager
+    textbox: {
       defaultTheme: {
         name: "default",
         x: 0, y: 0,
@@ -892,6 +1115,7 @@ const engine = {
       //new textbox
       new: function(text, theme, mods){
         let textBox = {};
+        textBox.type = "textbox";
         if(theme){
           for(i in theme){
             textBox[i] = theme[i];
@@ -915,6 +1139,7 @@ const engine = {
         textBox.close = function(){engine.ui.textbox.close(textBox)};
         textBox.open = function(optionalText){engine.ui.textbox.open(textBox, optionalText)};
         textBox.destroy = function(){engine.ui.textbox.destroy(textBox.controller, textBox);};
+        textBox.update = function(){engine.ui.textbox.update(textBox.manager.game, textBox)};
 
         return textBox;
       },
@@ -964,7 +1189,7 @@ const engine = {
       draw: function(game, textbox){
         //if visible?
         if(textbox.render){
-          //if bgImage === ""
+          //!if bgImage === ""
 
           engine.render.rect(game, textbox.x, textbox.y, textbox.width, textbox.height, textbox.bgColor);
           if(textbox.border){
@@ -1001,7 +1226,11 @@ const engine = {
         engine.render.line(game, x + 10 * scale, y, x + 5 * scale, y + 7 * scale, color);
         engine.render.line(game, x + 5 * scale, y + 7 * scale, x, y, color);
       },
-      open: function(textbox, optionalText){
+      open: function(textbox, optionalText, optionalFunction){
+        //!this isn't working?!
+        //used for things like changing the input mode
+        if(optionalFunction !== undefined){optionalFunction()};
+
         textbox.currentLine = 0;//!is this the best place for this?
         if(optionalText){
           textbox.text = optionalText;
@@ -1022,11 +1251,14 @@ const engine = {
           }
         };
       },
-      update: function(game, textbox){},
+      update: function(game, textbox){
+        engine.ui.textbox.draw(game, textbox);
+      },
     },//textbox
     menu: {
       new: function(text, options, theme){
         let newMenu = {};
+        newMenu.type = "menu";
         newMenu.text = text || "";
         newMenu.options = [];
         for(i in options){
@@ -1114,41 +1346,60 @@ const engine = {
     },//menu
     effects: {
       //example: fade to black, or tint screen
-      new: function(){},
-      //fade uses rgba format (for now)
-      fade: function(game, color, time, toOrFrom){
+      fade: function(game, color, time, direction){
         let newFade = {};
+        newFade.game = game;
         newFade.active = false;
-        newFade.complete = false;
-        newFade.time = time;
-        newFade.color = color;
-        newFade.toOrFrom = toOrFrom;
-        newFade.opacity = 1;
-        newFade.rate = -1;
-        if(newFade.toOrFrom === "to"){newFade.opacity = 0; newFade.rate = 1};
-        newFade.frames = time / 10;
-        newFade.currentFrame = newFade.frames;
-        newFade.draw = function(finalColor){
+        newFade.visible = false;
+        newFade.init = function(color, time, direction){
+          if(color === "black"){color = "0, 0, 0"};
+          if(color === "white"){color = "255, 255, 255"};
+          newFade.color = color;
+          newFade.time = time;
+          newFade.rate = 0.01;
+          newFade.opacity = 0;
+          if(direction < 0){newFade.opacity = 1};
+        };
+        newFade.draw = function(){
+          let finalColor = "rgba(" + newFade.color + "," + newFade.opacity;
+          
           engine.render.rect(game, 0, 0, game.settings.width, game.settings.height, finalColor);
         };
-        newFade.start = function(){
-          newFade.complete = false;
+        newFade.start = function(color, time, direction){
+          newFade.init(color, time, direction);
           newFade.active = true;
+          newFade.visible = true;
+          newFade.startingOpacity = newFade.opacity;
         };
         newFade.update = function(){
           if(newFade.active){
-            newFade.opacity += newFade.rate / time;
-            let finalColor = "rgba(" + newFade.color + "," + newFade.opacity + ")";
-            newFade.draw(finalColor);
-            if(newFade.toOrFrom === "to" && newFade.opacity === 1){
-              newFade.complete = true;
-            }else if(newFade.toOrFrom === "from" && newFade.opacity === 0){
-              newFade.complete = true;
+            if(newFade.startingOpacity > 0){
+              newFade.opacity -= newFade.rate;
+              if(newFade.opacity < 0){
+                newFade.active = false;
+              }
+            }else{
+              newFade.opacity += newFade.rate;
+              if(newFade.opacity >= 1){
+                newFade.active = false;
+              };
             };
+          };
+          if(newFade.visible){
+            newFade.draw();
           };
         };
         return newFade;
-      },
+      },//fade()
+      //schedules two fades and a wait between them 
+      //!consider naming flash?
+      transition: function(game, color, time1, time2, time3, callback){
+        //begin fade to color for time1
+        //schedule timer for 
+        //    callback
+        //    wait for time2
+        //schedule timer for fade from color for time3
+      },//transition
       update: function(arrayOfEffects){
         for(i in arrayOfEffects){
           arrayOfEffects[i].update();
