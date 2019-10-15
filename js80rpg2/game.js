@@ -24,7 +24,7 @@ let doorSfx = scene1.audio.manager.newTrack("sfx", "punch.wav");
 
 let dialogueTheme = engine.ui.textbox.newTheme({
   x: 10, y: 150, height: game1.settings.height - 160, width: game1.settings.width - 20,
-  bgColor: colors[3], borderColor: colors[1], fontColor: colors[1],
+  bgColor: colors[3], borderColor: colors[1], fontColor: colors[0],
   charLength: 50, vertOffset: 10, lines: 2,
   overflowIconColor: colors[0],
 });
@@ -73,7 +73,10 @@ function generateNpcsFromMap(map, layer, data, TiledOffset){
   };
   return npcs;
 };//generateNpcs()
-let npcData = [{text: ["holla!"], interaction: function(){}}, {text:["hiya!", "later!"], interaction: function(){}}, {text: ["I am at z-level 10!"], interaction: function(){}}];
+let npcData = [
+  {text: ["Hiya. I can say all sorts of things!", "...but I'm not gonna."], interaction: function(){}}, 
+  {text: ["hey! See how I can turn to face you whenever you speak to me?", "later!"], interaction: function(){}}, 
+  {text: ["I am at z-level 10!"], interaction: function(){}}];
 let generatedNpcs = generateNpcsFromMap(scene1.map.current, 3, npcData, -16);
 
 function checkNpcs(list, x, y, tag){
@@ -163,7 +166,40 @@ scene1Fade = scene1.ui.manager.effect.new("fade", game1, "black", 100, 1);
 
 let music1 = scene1.audio.manager.newTrack("music", "music.mp3");
 
+let mainMenu = scene1.ui.manager.menu.new("Menu", [{text: "Status", effect: function(){console.log("Status")}},{text: "items", effect: function(){console.log("items")}}]);
+
+let cow = {
+  startTime: 100,
+  blinkTime: 30,
+  time: 100,
+  blink: function(){
+    cow.time--;
+    if(cow.time < 0){
+      if(!cow.blinking){
+        cow.time = cow.blinkTime;
+        cow.blinking = true;
+      }else{
+        cow.time = cow.startTime;
+        cow.blinking = false;
+      };
+    };
+  },
+  blinking: false,
+  draw: function(){
+    if(cow.blinking){
+      mapAsset.layers[1].data[256] = 164;
+    }else{
+      mapAsset.layers[1].data[256] = 163;
+    };
+  },
+  update: function(){
+    cow.blink();
+    cow.draw();
+  },
+};
+
 game1.frame = function(){
+  cow.update();
   game1.update();
 };//game1.frame()
 game1.start();

@@ -46,17 +46,17 @@ function collisionTest(map, layer, entity, dir, group, tag){
   return false;
 };//collision()
 
-function step(entity, dir, distance){
+function step(entity, dir, distance, rate){
   if(collisionTest(game1.scenes.current.map.current.assets[0], 4, entity, dir, game1.scenes.current.collision.entities, "physical")){return};
   inputManager.setMode(steppingMode);
   entity.justFinished = true;
   entity.distanceRemaining = distance;
   function check(){
     if(entity.distanceRemaining > 0){
-      entity.distanceRemaining--;
+      entity.distanceRemaining -= (rate || 1);
       let direction = convertDirection(dir);
-      entity.x += direction.x;
-      entity.y += direction.y;
+      entity.x += direction.x * (rate || 1);
+      entity.y += direction.y * (rate || 1);
       game1.scenes.current.timer.manager.timer(1, function(){check()});
     }else if(entity.justFinished){
       entity.justFinished = false;
@@ -100,25 +100,29 @@ readMode.newKey(" ", function(){
   //!the above line sets game to playMode when textbox closes! this will mess up cutscenes
 });
 
+let rate = 2;
+
+//playMode.newKey("Shift", function(){rate = 2});
+
 playMode.newKey("a", function(){
   player1.facing = "left";
   player1.animation.setAnim("walkLeft");
-  step(player1, "left", distance);
+  step(player1, "left", distance, rate);
 }, true);
 playMode.newKey("d", function(){
   player1.facing = "right";
   player1.animation.setAnim("walkRight");
-  step(player1, "right", distance);
+  step(player1, "right", distance, rate);
 }, true);
 playMode.newKey("w", function(){
   player1.facing = "up";
   player1.animation.setAnim("walkUp");
-  step(player1, "up", distance);
+  step(player1, "up", distance, rate);
 }, true);
 playMode.newKey("s", function(){
   player1.facing = "down";
   player1.animation.setAnim("walkDown");
-  step(player1, "down", distance);
+  step(player1, "down", distance, rate);
 }, true);
 playMode.newKey(" ", function(){
   //check map for interaction

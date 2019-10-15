@@ -1029,12 +1029,12 @@ const engine = {
 
     update: function(inputManager){
       if(inputManager.currentMode.enabled){
-        for(i in inputManager.currentMode.keys){
-          if(inputManager.currentMode.keys[i].state){
+        for(z in inputManager.currentMode.keys){
+          if(inputManager.currentMode.keys[z].state){
             //!when an effect changes the mode, things can break; created inputManager.setMode to fix
-            inputManager.currentMode.keys[i].effect();
+            inputManager.currentMode.keys[z].effect();
 
-            if(inputManager.currentMode.keys[i].exclusive){
+            if(inputManager.currentMode.keys[z].exclusive){
               break;
             };
 
@@ -1065,8 +1065,8 @@ const engine = {
           },
         },
         menu: {
-          new: function(){
-            let menu = engine.ui.menu.new();
+          new: function(text, options, theme){
+            let menu = engine.ui.menu.new(text, options, theme);
             menu.manager = manager;
             manager.elements.push(menu);
             return menu;
