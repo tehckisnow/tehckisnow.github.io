@@ -1,91 +1,89 @@
 <html>
   <head>
-    <title>The Danger Room</title>
-    <meta name=”viewport” content=”width=device-width, initial-scale=1″>
     <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="trainer.css">
   </head>
   <body>
-    <div id="maindiv">
-      <h1>Welcome to the Danger Room!</h1><button id="mobile" onclick="trainer.toggleMobile()">!</button>
 
+    <div id="main">
+      <h1 id="title">The Danger Room</h1>
+      
+      <div id="timerbody">
 
-      <div id="settings">
-        <p>Time: </p>
-          minutes
-          <select id="minutes">
-            <option value=0>0</option>
-            <option value=1 selected="selected">1</option>
-            <option value=2>2</option>
-            <option value=3>3</option>
-            <option value=4>4</option>
-            <option value=5>5</option>
-            <option value=6>6</option>
-            <option value=7>7</option>
-            <option value=8>8</option>
-            <option value=9>9</option>
-            <option value=10>10</option>
+        <div id="countdown" hidden class="section">
+          <p id="roundsremaininglabel" class="roundsremaining">rounds remaining: </p>
+          <p id="roundsremaining" class="roundsremaining"></p>
+          <div>
+            <p id="time"<>00:00</p>
+          </div>
+          <p id="attackoutput"></p>
+        </div>
+
+        <div id="timersettings" class="section">
+          Time:
+          <select id="minutes">minutes
+              <option value=0>0</option>
+              <option value=1 selected="selected">1</option>
+              <option value=2>2</option>
+              <option value=3>3</option>
+              <option value=4>4</option>
+              <option value=5>5</option>
+              <option value=6>6</option>
+              <option value=7>7</option>
+              <option value=8>8</option>
+              <option value=9>9</option>
+              <option value=10>10</option>
           </select>
-          <select id="seconds">
-            <option value=0>0</option>
-            <option value=10>10</option>
-            <option value=20>20</option>
-            <option value=30>30</option>
+          <select id="seconds">seconds
+              <option value=0>0</option>
+              <option value=10>10</option>
+              <option value=20>20</option>
+              <option value=30>30</option>
           </select>
-            seconds
-        </p>
-        <p>
-          rounds:
+          <br>
+          Rounds:
           <select id="rounds">
-            <option value=1>1</option>
-            <option value=2>2</option>
-            <option value=3>3</option>
-            <option value=4>4</option>
-            <option value=5>5</option>
-            <option value=6>6</option>
-            <option value=7>7</option>
-            <option value=8>8</option>
-            <option value=9>9</option>
-            <option value=10>10</option>
+              <option value=1>1</option>
+              <option value=2>2</option>
+              <option value=3>3</option>
+              <option value=4>4</option>
+              <option value=5>5</option>
+              <option value=6>6</option>
+              <option value=7>7</option>
+              <option value=8>8</option>
+              <option value=9>9</option>
+              <option value=10>10</option>
           </select>
-            rest:
+          <br>rest between rounds
           <select id="rest">
-            <option value=0>0</option>
-            <option value=10>10</option>
-            <option value=20>20</option>
-            <option value=30>30</option>
-            <option value=60>60</option>
+              <option value=0>0</option>
+              <option value=10>10</option>
+              <option value=20>20</option>
+              <option value=30>30</option>
+              <option value=60>60</option>
           </select>
-        </p>
-        <p><a id='optionstoggle' href="#" onclick="trainer.dom.toggleOptions()">more options</a></p>
-        <div id="options" hidden>Options!<br>
-          difficulty: 
-          <select id='difficulty'>
-            <option value=1>1</option>
-            <option value=2>2</option>
-            <option value=3>3</option>
-          </select>
+          <br>
+          <a id="moreoptions" onclick="toggleOptions()">more options</a>
         </div>
-        
-        <button id="go" onclick="trainer.setTimer()">Fight!</button>
-      
-      </div>
-      
+
+        <div id="advancedsettings" hidden>
+          Options:
+          <br>Difficulty:
+          <select></select>
+        </div>
+
+        <div id="controls" class="section">
+          <button class="button" id="fightbutton" onclick="play()">FIGHT!</button><br>
+          <button hidden class="button" id="pausebutton" onclick="pause()">pause</button>
+          <button hidden class="button" id="resumebutton" onclick="resume()">resume</button>
+          <button hidden class="button" id="stopbutton" onclick="stop()">stop</button>
+        </div>
 
 
-      <div id="timer" hidden>
-        <h2 id="displayrounds">Rounds remaining: 1</h2>
-        <h2 id="timeremaining"></h2>
-        <h2 id="attackname">-</h2>
-        <div id="controls">
-          <button id='pause' onclick="trainer.pause()">pause</button>
-          <button id='resume' onclick="trainer.resume()">resume</button>
-          <button id='stop' onclick="trainer.stop()">stop</button>
-        </div>
       </div>
 
     </div>
-    </div>
-    <script src='dangerroom.js'></script>
+    
+    <script src="trainer.js"></script>
   </body>
 </html>
