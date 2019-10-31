@@ -1,0 +1,26 @@
+:root {
+  --bg-color: rgb(26,26,26);
+  --color: rgb(192,155,100);
+}
+body {
+  color: var(--color);
+  background-color: var(--bg-color);
+  text-align: center;
+}
+div {
+  border: solid var(--color);
+}
+textarea {
+  width: 90%;
+  height: 40%;
+  color: var(--color);
+  background-color: var(--bg-color);
+  border: solid var(--color);
+}
+button {
+  color: var(--color);
+  background-color: var(--bg-color);
+  border: solid var(--color);
+  padding: 10px;
+  margin: 10px;
+}
