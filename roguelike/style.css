@@ -1,0 +1,42 @@
+@font-face {
+  font-family: roguelike;
+  src: url('roguelike.ttf') format('truetype');
+}
+body {
+  text-align: center;
+  background-color: black;
+  color: #5fa4ff;
+  font-family: wintermute, monospace;
+}
+div {
+  border: solid rgb(95, 164, 255);
+  padding: 5px;
+  margin: 5px;
+}
+p {
+  padding: 0px;
+  margin: 0px;
+}
+#wrapper {
+  display: inline-block;
+  border: none;
+}
+#main {
+  position: relative;
+  left: -100px;
+}
+#titlePanel {
+  font-size: 24px;
+  text-align: center;
+}
+#mapPanel {
+  display: inline-block;
+  font-family: wintermute, monospace;
+}
+#uiPanel {
+  display: inline-block;
+  text-align: left;
+}
+#consolePanel {
+  text-align: left;
+}
