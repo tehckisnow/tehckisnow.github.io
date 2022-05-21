@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <title>Trionic Reading
+    </title>
+    <link rel="stylesheet" href="style.css"></link>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet"> 
+
+  </head>
+
+  <body>
+    <div id="content">
+      <h1>Trionic Reading</h1>
+      <div>
+        <p class="statictext">Input</p>
+        <input id="input" type="text" placeholder="paste text input here..." class="statictext">
+        <div id="buttondiv">
+          <button id="submit" onclick="submitButton()">Submit</button>
+          <button id="showlist" onclick="demoButton()">Demo</button>
+          <button id="clear" onclick="clearButton()">Clear</button>
+          <button id="order" onclick="toggleOrderButton()">Top to bottom</button>
+          <p id="fixationlabel" class="statictext">Fixation</p>
+          <input id="fixationinput" type="range" onchange="fixationInputChange()">
+        </div>
+        <p class="inlinep statictext">Emphasis Mode: </p> <p class="inlinep statictext" id="mode">Mode Not Yet Set</p>
+        <br><button id="toggleemphasis" onclick="switchEmphasisMode()">switch</button>
+        <p class="organizerp"></p>
+        <div>
+        <p id="mainText"><br></p>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
