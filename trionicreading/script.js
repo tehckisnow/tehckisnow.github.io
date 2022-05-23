@@ -27,6 +27,7 @@
 
 //TODO:
 //revise fixation algorithm
+//implement adjustable saccades
 //on page load, put cursor focus on input? (maybe)
 //redesign page layout / css rearrange/cleanup/reorganize
 //css toggleswitch for switching emphasis mode? (maybe)
@@ -95,6 +96,7 @@
 
 
 const mainText = document.getElementById("mainText");
+const style = document.getElementById("style");
 const togOrdBtn = document.getElementById("order");
 const inputElement = document.getElementById("input");
 const fixationInputElement = document.getElementById("fixationinput");
@@ -113,6 +115,7 @@ const endBold = "</b>";
 //html 5 specification says to use bold as a last resort
 // could alternatively use emphasized <em>, important <strong>, or marked <mark> ?
 
+var emphasisFontWeight = 700;
 var emphasisMode = 0;
 var modeNames = ["Bold", "Color"];
 
@@ -136,6 +139,7 @@ var wordSeparators = /\—|\s/;
 
 initFixationElement();
 updateEmphasisModeElement();
+initEmfixStyle(emphasisFontWeight);
 
 function initFixationElement()
 {
@@ -169,6 +173,25 @@ function setText(newText)
 {
 	mainText.innerHTML = newText + br;
 }
+
+function createStyle(classname, stylePropertyAndValue, stylesheet="style")
+{
+	var cssStyle = document.createElement('style');
+	cssStyle.type = 'text/css';
+	var rules = document.createTextNode("." + classname + " {" + stylePropertyAndValue + "}");
+	cssStyle.appendChild(rules);
+	document.getElementById(stylesheet).appendChild(cssStyle);
+}
+
+function initEmfixStyle(fontWeight)
+{
+	var stylename = "emfix";
+	var fontWeightPrefix = "font-weight: ";
+	var important = " !important";
+
+	createStyle(stylename, fontWeightPrefix + fontWeight + important);
+}
+//createStyle("emfix", "font-weight: 900 !important");
 
 function toggleOrderButton()
 {
