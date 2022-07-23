@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>Chooser
+    </title>
+    <link rel="stylesheet" href="style.css"></link>
+  </head>
+
+  <body>
+    <div id="content">
+      <h1>Chooser</h1>
+      <div>
+        <input id="listfile" type="file" onchange="LoadFile()">
+        <div id="buttondiv">
+          <button id="choose" onclick="chooseButton()">Choose</button>
+          <button id="showlist" onclick="showList()">Show List</button>
+          <button id="clear" onclick="clearButton()">Clear</button>
+          <button id="order" onclick="toggleOrderButton()">Top to bottom</button>
+          <button id="arcana" onclick="arcanaButton()">Arcana</button>
+        </div>
+        <div>
+        <p id="mainText"><br></p>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
