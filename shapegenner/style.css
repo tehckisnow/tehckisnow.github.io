@@ -1,0 +1,53 @@
+:root {
+  --main-color: rgb(47, 103, 255);
+  --main-bg-color: rgb(35, 35, 35);
+  --alt-bg-color: rgb(46, 46, 46);
+}
+
+body {
+  color: var(--main-color);
+  background-color: var(--main-bg-color);
+}
+
+h1 {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+button {
+  color: var(--main-color);
+  background-color: var(--main-bg-color);
+}
+
+input {
+  color: var(--main-color);
+  background-color: var(--alt-bg-color);
+}
+
+input::file-selector-button {
+  color: var(--main-color);
+  background-color: var(--main-bg-color);
+}
+
+div {
+  outline: solid var(--main-color) 2px;
+  padding: 5px;
+  margin: 0 auto;
+}
+
+svg {
+  outline: solid black 3px;
+}
+
+#main {
+  /* width: 70%; */
+}
+
+#content {
+  text-align: center;
+}
+
+.center {
+  text-align: center;
+}
