@@ -606,13 +606,13 @@ let svgManager =
     let defaultParameterRanges =
     {
       types: ['rect', 'circle'],
-      //min and max x and y will depend on the area of the svg object.
+      //!min and max x and y will eventually depend on the area of the svg object.
       minWidth: 10,
-      maxWidth: 100,
+      maxWidth: 50,
       minHeight: 10,
-      maxHeight: 100,
-      minRadius: 10,
-      maxRadius: 100,
+      maxHeight: 50,
+      minRadius: 5,
+      maxRadius: 50,
 
       chanceOfRoundCorners: 10,
       maxRoundCornerX: 50,
