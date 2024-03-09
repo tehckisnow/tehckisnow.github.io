@@ -1,0 +1,43 @@
+const palettes =
+[
+  // rainbow
+  {
+    id: "rainbow",
+    data: [
+    "red",
+    "orange",
+    "yellow",
+    "green",
+    "blue",
+    "indigo",
+    "violet"
+    ]
+  },
+  // monochrome (black and white)
+  {
+    id: "monochrome",
+    data: [
+      "rgb(10,10,10)",
+      "rgb(255,255,255)"
+    ]
+  },
+  // soft
+  {
+    id: "soft",
+    data: [
+      "#88498f",
+      "#779fa1",
+      "#e0cba8",
+      "#ff6542",
+      "#564155"
+    ]
+  },
+  // monored
+  {
+    id: "monoReds",
+    data: [
+    "#FF8888",
+    "#FF2222"
+    ]
+  }
+];
