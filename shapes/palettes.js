@@ -32,12 +32,15 @@ const palettes =
       "#564155"
     ]
   },
-  // monored
+  // pinks
   {
-    id: "monoReds",
+    id: "pinks",
     data: [
-    "#FF8888",
-    "#FF2222"
+    "#eac8ca",
+    "#f2d5f8",
+    "#e6c0e9",
+    "#bfabcb",
+    "#8d89a6"
     ]
   }
 ];
