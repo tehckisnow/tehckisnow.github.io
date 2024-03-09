@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Shapes</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <div id="main">
+      <select id="numGen">
+        <option value="1">1</option>
+        <option value="10" selected="selected">10</option>
+        <option value="100">100</option>
+      </select>
+      <button id="generate" onclick="generate()">Generate</button>
+      <button id="clear" onclick="clearCanvas()">Clear</button>
+      <br>
+      <canvas id="canvas"></canvas>
+      <br>
+
+      <button id="togglesettingsbutton" onclick="settings()">Settings</button>
+      <br>
+
+      <div id="settings" style="display: none;">
+        not yet implemented
+        <br>
+        <button id="setsettings" onclick="setSettings()">set</button>
+        <br>
+
+        canvas width: <textarea id="canvasWidthSetting"></textarea>
+        <br>
+        canvas height: <textarea id="canvasHeightSetting"></textarea>
+        <br>
+        <br>
+
+        palette: <select id="paletteselection"></select>
+        <br><br>
+
+        chance to rotate: <textarea id="rotateSetting"></textarea>
+        <br>
+        max rotation: <textarea id="maxRotationSetting"></textarea>
+        <br>
+
+        min rect width: <textarea id="minRectWidthSetting"></textarea>
+        <br>
+        min rect height; <textarea id="minRectHeightSetting"></textarea>
+        <br>
+        max rect width: <textarea id="Setting"></textarea>
+        <br>
+        max rect height: <textarea id="Setting"></textarea>
+        <br>
+        <br>
+
+        chance of circle: <textarea id="Setting"></textarea>
+        <br>
+        min circle radius: <textarea id="Setting"></textarea>
+        <br>
+        max circle radius: <textarea id="Setting"></textarea>
+        <br>
+        chance of elipse: <textarea id="Setting"></textarea>
+        <br>
+        max circle elipse: <textarea id="Setting"></textarea>
+        <br>
+        <br>
+
+        chance of line: <textarea id="Setting"></textarea>
+        <br>
+        min line width: <textarea id="Setting"></textarea>
+        <br>
+        max line width: <textarea id="Setting"></textarea>
+        <br>
+
+
+
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

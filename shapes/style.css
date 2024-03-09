@@ -1,0 +1,44 @@
+:root {
+  --color: aliceblue;
+  --mainBG: rgb(68, 68, 68);
+  --secondBG: rgb(36, 36, 36);
+  --outline: rgb(132, 132, 247);
+}
+
+body {
+  color: aliceblue;
+  background-color: var(--mainBG);
+}
+
+div {
+  outline: solid var(--outline);
+  background-color: var(--secondBG);
+  display: inline-block;
+  margin: 15px;
+}
+
+canvas {
+  outline: solid var(--outline);
+  background-color: black;
+  margin: 15px;
+}
+
+button {
+  margin: 15px 0px 15px;
+}
+
+select {
+  margin: 15px 0px 15px 15px;
+}
+
+#main {
+  display: inline-block;
+}
+
+#settings {
+  width:max-width;
+}
+
+#togglesettingsbutton {
+  margin: 15px;
+}
