@@ -3,6 +3,8 @@
 // implement settings
 // fix elipse
 // tweak default settings for better results
+// add support for random palettes?
+// improve UI (settings looks bad and should be reorganized/straightened)
 
 // -------------------------------------------------------------
 
@@ -29,26 +31,6 @@ let lineMaxWidth = 10;
 let chanceOfRotate = 30;
 let maxRotate = 45
 
-const palettes =
-[
-  // monochrome
-  [
-    "#FF8888",
-    "#FF2222"
-  ],
-  // rainbow
-  [
-    "red",
-    "orange",
-    "yellow",
-    "green",
-    "blue",
-    "indigo",
-    "violet"
-  ]
-];
-
-let colors = palettes[1];
 
 // -------------------------------------------
 
@@ -57,6 +39,28 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 canvas.width = canvasW;
 canvas.height = canvasH;
+
+function fillPaletteSelector()
+{
+  const paletteSelection = document.getElementById("paletteselection");
+  let i=0;
+  palettes.forEach((palette) => {
+    let opt = document.createElement("option");
+    opt.value = i++;
+    opt.innerHTML = palette.id;
+    paletteSelection.appendChild(opt);
+  });
+}
+fillPaletteSelector();
+
+function setPaletteFromSelector()
+{
+  console.log("setting palette");
+  const paletteSelection = document.getElementById("paletteselection");
+  const i = paletteSelection.value;
+  colors = palettes[i].data;
+}
+setPaletteFromSelector(); // there should be a better way of setting default palette?
 
 function randInc(min, max)
 {
@@ -245,16 +249,54 @@ function settings()
   settings.style.display = visible ? "none" : "block";
 }
 
-function setSettings()
+// Apply settings
+function applySettings()
 {
-  console.log("set");
+  console.log("applying settings");
 }
 
+// excerpt from site that draws a box that looks like a palette
+// adapt to create palettes
+function drawB() {
+  const ctx = document.getElementById("canvas").getContext("2d");
+  for (let i = 0; i < 6; i++) {
+    for (let j = 0; j < 6; j++) {
+      ctx.fillStyle = `rgb(${Math.floor(255 - 42.5 * i)} ${Math.floor(
+        255 - 42.5 * j,
+      )} 0)`;
+      ctx.fillRect(j * 25, i * 25, 25, 25);
+    }
+  }
+}
+
+function genColor(i)
+{
+  const num1 = Math.floor(255 - 42.5 * i);
+  const num2 = Math.floor(255 - 42.5 * i);
+  const num3 = Math.floor(255 - 42.5 * i);
+  let color = `rgb(${num2}, ${num2}, ${num3})`;
+  return color;
+}
+
+function genPalette(num)
+{
+  let result = [];
+  for(let i=0; i<num; i++)
+  {
+    const rand = randInc(1, 255);
+    result.push(genColor(i * rand));
+    //let color = 'rgb(${Math.floor(255 - 42.5 * i)} ${Math.floor(255 - 42.5 * i)} 0)';
+    // result.push('rgb(${Math.floor(255 - 42.5 * i)} ${Math.floor(255 - 42.5 * i)} 0)');
+    //result.push(color);
+  }
+  console.log(result);
+  return result;
+}
 // ------------------------------------------
 // TEST
 
 function test()
 {
-
+  //colors = genPalette(10);
 }
 test();
