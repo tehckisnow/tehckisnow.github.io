@@ -25,7 +25,7 @@
       <div id="settings" style="display: none;">
         not yet implemented
         <br>
-        <button id="setsettings" onclick="setSettings()">set</button>
+        <button id="applysettings" onclick="applySettings()">apply</button>
         <br>
 
         canvas width: <textarea id="canvasWidthSetting"></textarea>
@@ -34,7 +34,7 @@
         <br>
         <br>
 
-        palette: <select id="paletteselection"></select>
+        palette: <select id="paletteselection" onchange="setPaletteFromSelector()"></select>
         <br><br>
 
         chance to rotate: <textarea id="rotateSetting"></textarea>
@@ -75,6 +75,7 @@
 
       </div>
     </div>
+    <script src="palettes.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
