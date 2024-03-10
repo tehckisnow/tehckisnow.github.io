@@ -32,11 +32,17 @@ select {
   margin: 15px 0px 15px 15px;
 }
 
+table {
+  outline: solid var(--outline);
+  width: 100%;
+}
+
 #main {
   display: inline-block;
 }
 
 #settings {
+  display: block;
   width:max-width;
 }
 

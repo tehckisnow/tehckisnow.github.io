@@ -19,60 +19,180 @@
       <canvas id="canvas"></canvas>
       <br>
 
-      <button id="togglesettingsbutton" onclick="settings()">Settings</button>
+      <button id="togglesettingsbutton" onclick="toggleSettings()">Settings</button>
       <br>
 
       <div id="settings" style="display: none;">
-        not yet implemented
+        settings not yet fully implemented
         <br>
         <button id="applysettings" onclick="applySettings()">apply</button>
         <br>
 
-        canvas width: <textarea id="canvasWidthSetting"></textarea>
-        <br>
-        canvas height: <textarea id="canvasHeightSetting"></textarea>
-        <br>
-        <br>
+        <table>
+          <tr>
+            <td>
+              canvas width: 
+            </td>
+            <td>
+              <textarea id="canvasWidthSetting"></textarea>
+            </td>
+          </tr>
 
-        palette: <select id="paletteselection" onchange="setPaletteFromSelector()"></select>
-        <br><br>
+          <tr>
+            <td>
+              canvas height: 
+            </td>
+            <td>
+              <textarea id="canvasHeightSetting"></textarea>
+            </td>
+          </tr>
 
-        chance to rotate: <textarea id="rotateSetting"></textarea>
-        <br>
-        max rotation: <textarea id="maxRotationSetting"></textarea>
-        <br>
+          <tr>
+            <td>
+              palette: 
+            </td>
+            <td>
+              <select id="paletteselection" onchange="setPaletteFromSelector()"></select>
+            </td>
+          </tr>
 
-        min rect width: <textarea id="minRectWidthSetting"></textarea>
-        <br>
-        min rect height; <textarea id="minRectHeightSetting"></textarea>
-        <br>
-        max rect width: <textarea id="Setting"></textarea>
-        <br>
-        max rect height: <textarea id="Setting"></textarea>
-        <br>
-        <br>
+          <tr>
+            <td>
+              background color: 
+            </td>
+            <td>
+              <textarea id="backgroundColorSetting"></textarea>
+            </td>
+          </tr>
 
-        chance of circle: <textarea id="Setting"></textarea>
-        <br>
-        min circle radius: <textarea id="Setting"></textarea>
-        <br>
-        max circle radius: <textarea id="Setting"></textarea>
-        <br>
-        chance of elipse: <textarea id="Setting"></textarea>
-        <br>
-        max circle elipse: <textarea id="Setting"></textarea>
-        <br>
-        <br>
+          <tr>
+            <td>
+              chance to rotate: 
+            </td>
+            <td>
+              <textarea id="rotateSetting"></textarea>
+            </td>
+          </tr>
 
-        chance of line: <textarea id="Setting"></textarea>
-        <br>
-        min line width: <textarea id="Setting"></textarea>
-        <br>
-        max line width: <textarea id="Setting"></textarea>
-        <br>
+          <tr>
+            <td>
+              max rotation: 
+            </td>
+            <td>
+              <textarea id="maxRotationSetting"></textarea>
+            </td>
+          </tr>
 
+          <tr>
+            <td>
+              min rect width: 
+            </td>
+            <td>
+              <textarea id="minRectWidthSetting"></textarea>
+            </td>
+          </tr>
 
+          <tr>
+            <td>
+              min rect height: 
+            </td>
+            <td>
+              <textarea id="minRectHeightSetting"></textarea>
+            </td>
+          </tr>
 
+          <tr>
+            <td>
+              max rect width: 
+            </td>
+            <td>
+              <textarea id="maxRectWidthSetting"></textarea>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              max rect height: 
+            </td>
+            <td>
+              <textarea id="maxRectHeightSetting"></textarea>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              chance of circle: 
+            </td>
+            <td>
+              <textarea id="chanceOfCircleSetting"></textarea>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              min circle radius: 
+            </td>
+            <td>
+              <textarea id="minCircleRadiusSetting"></textarea>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              max circle radius: 
+            </td>
+            <td>
+              <textarea id="maxCircleRadiusSetting"></textarea>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              chance of elipse: 
+            </td>
+            <td>
+              <textarea id="chanceOfElipseSetting"></textarea>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              max circle elipse: 
+            </td>
+            <td>
+              <textarea id="maxCircleElipseSetting"></textarea>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              chance of line: 
+            </td>
+            <td>
+              <textarea id="chanceOfLineSetting"></textarea>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              min line width: 
+            </td>
+            <td>
+              <textarea id="minLineWidthSetting"></textarea>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              max line width: 
+            </td>
+            <td>
+              <textarea id="maxLineWidthSetting"></textarea>
+            </td>
+          </tr>
+
+        </table>
+        
       </div>
     </div>
     <script src="palettes.js"></script>

@@ -1,45 +1,72 @@
 //TODO
-// implement backgroundColor
-// implement settings
+//// implement backgroundColor
+//// implement settings (mostly done)
 // fix elipse
 // tweak default settings for better results
 // add support for random palettes?
-// improve UI (settings looks bad and should be reorganized/straightened)
+//// improve UI (settings looks bad and should be reorganized/straightened)
 // consider implementing gradients (especially subtle radial gradients) and shadows
 
 // -------------------------------------------------------------
 
-let backgroundColor = "black";
+let settingsObj =
+{
+  backgroundColorSetting: "black",
+  canvasWidthSetting: 400,
+  canvasHeightSetting: 600,
 
-let canvasH = 400;
-let canvasW = 600;
+  minRectWidthSetting: 10,
+  minRectHeightSetting: 10,
+  maxRectWidthSetting: 100,
+  maxRectHeightSetting: 100,
 
-let minRectW = 10;
-let minRectH = 10;
-let maxRectW = 100;
-let maxRectH = 100;
+  chanceOfCircleSetting: 30,
+  minCircleRadiusSetting: 10,
+  maxCircleRadiusSetting: 100,
+  chanceOfElipseSetting: 30,
+  maxCircleElipseSetting: 100,
 
-let chanceOfCircle = 30;
-let minCircR = 10;
-let maxCircR = 100;
-let chanceOfElipse = 30;
-let maxCircElipse = 100;
+  chanceOfLineSetting: 30,
+  minLineWidthSetting: 2,
+  maxLineWidthSetting: 10,
 
-let chanceOfLine = 30;
-let lineMinWidth = 2;
-let lineMaxWidth = 10;
+  rotateSetting: 30,
+  maxRotationSetting: 45
+}
 
-let chanceOfRotate = 30;
-let maxRotate = 45
-
+const settingsIds =
+  [
+    "backgroundColorSetting",
+    "canvasWidthSetting",
+    "canvasHeightSetting",
+    "rotateSetting",
+    "maxRotationSetting",
+    "minRectWidthSetting",
+    "minRectHeightSetting",
+    "maxRectWidthSetting",
+    "maxRectHeightSetting",
+    "chanceOfCircleSetting",
+    "minCircleRadiusSetting",
+    "maxCircleRadiusSetting",
+    "chanceOfElipseSetting",
+    "maxCircleElipseSetting",
+    "chanceOfLineSetting",
+    "minLineWidthSetting",
+    "maxLineWidthSetting"
+  ];
 
 // -------------------------------------------
 
 // init
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-canvas.width = canvasW;
-canvas.height = canvasH;
+
+function setCanvasSize()
+{
+  canvas.width = settingsObj.canvasHeightSetting;
+  canvas.height = settingsObj.canvasWidthSetting;
+}
+setCanvasSize();
 
 function fillPaletteSelector()
 {
@@ -96,13 +123,13 @@ function generate()
   while(i < num)
   {
     // if line
-    if(percentTest(chanceOfLine))
+    if(percentTest(settingsObj.chanceOfLineSetting))
     {
       const line = genLine();
       drawLine(line.color, line.x, line.y, line.x2, line.y2, line.width);
     }
     // if circle
-    if(percentTest(chanceOfCircle))
+    if(percentTest(settingsObj.chanceOfCircleSetting))
     {
       const circ = genCirc();
       if(circ.rotate > 0);
@@ -135,15 +162,15 @@ function getNum()
 
 function genRect()
 {
-  const x = randInc(0, canvasW);
-  const y = randInc(0, canvasH);
-  const w = randInc(minRectW, maxRectW);
-  const h = randInc(minRectH, maxRectH);
+  const x = randInc(0, settingsObj.canvasHeightSetting);
+  const y = randInc(0, settingsObj.canvasWidthSetting);
+  const w = randInc(settingsObj.minRectWidthSetting, settingsObj.maxRectWidthSetting);
+  const h = randInc(settingsObj.minRectHeightSetting, settingsObj.maxRectHeightSetting);
   const color = selectRandomElement(colors);
   let rotate = 0;
-  if(percentTest(chanceOfRotate))
+  if(percentTest(settingsObj.rotateSetting))
   {
-    rotate = randInc(1, maxRotate);
+    rotate = randInc(1, settingsObj.maxRotationSetting);
   }
   return {
     color: color,
@@ -163,20 +190,20 @@ function drawRect(color, x, y, w, h)
 
 function genCirc()
 {
-  const x = randInc(0, canvasW);
-  const y = randInc(0, canvasH);
+  const x = randInc(0, settingsObj.canvasHeightSetting);
+  const y = randInc(0, settingsObj.canvasWidthSetting);
   // r is radius
-  const r = randInc(minCircR, maxCircR);
+  const r = randInc(settingsObj.minCircleRadiusSetting, settingsObj.maxCircleRadiusSetting);
   const color = selectRandomElement(colors);
   let elipse = 0;
-  if(percentTest(chanceOfElipse))
+  if(percentTest(settingsObj.chanceOfElipseSetting))
   {
-    elipse = maxCircElipse;
+    elipse = settingsObj.maxCircElipseSetting;
   }
   let rotate = 0;
-  if(percentTest(chanceOfRotate))
+  if(percentTest(settingsObj.rotateSetting))
   {
-    rotate = randInc(1, maxRotate);
+    rotate = randInc(1, settingsObj.maxRotationSetting);
   }
   return {
     color: color,
@@ -205,11 +232,11 @@ function drawCirc(color, x, y, r, elipse)
 
 function genLine()
 {
-  const x = randInc(0, canvasW);
-  const y = randInc(0, canvasH);
-  const x2 = randInc(0, canvasW);
-  const y2 = randInc(0, canvasH);
-  const width = randInc(lineMinWidth, lineMaxWidth);
+  const x = randInc(0, settingsObj.canvasHeightSetting);
+  const y = randInc(0, settingsObj.canvasWidthSetting);
+  const x2 = randInc(0, settingsObj.canvasHeightSetting);
+  const y2 = randInc(0, settingsObj.canvasWidthSetting);
+  const width = randInc(settingsObj.minLineWidthSetting, settingsObj.maxLineWidthSetting);
   const color = selectRandomElement(colors);
   return {
     color: color,
@@ -239,25 +266,17 @@ function drawLine(color, x, y, x2, y2, width)
 function clearCanvas()
 {
   console.log("clearing");
-  ctx.clearRect(0, 0, canvasW, canvasH);
-}
+  //ctx.clearRect(0, 0, settingsObj.canvasHeightSetting, settingsObj.canvasWidthSetting);
 
-// toggle settings visibility
-function settings()
-{
-  const settings = document.getElementById("settings");
-  const visible = settings.style.display == "none" ? false : true;
-  settings.style.display = visible ? "none" : "block";
+  ctx.fillStyle = settingsObj.backgroundColorSetting;
+  //ctx.fillRect(0,0,settingsObj.canvasWidthSetting, settingsObj.canvasHeightSetting);
+  ctx.fillRect(0,0, settingsObj.canvasHeightSetting, settingsObj.canvasWidthSetting);
 }
+clearCanvas();
 
-// Apply settings
-function applySettings()
-{
-  console.log("applying settings");
-}
 
 // excerpt from site that draws a box that looks like a palette
-// adapt to create palettes
+// adapt to create palettes, then remove
 function drawB() {
   const ctx = document.getElementById("canvas").getContext("2d");
   for (let i = 0; i < 6; i++) {
@@ -272,7 +291,6 @@ function drawB() {
 
 function genColor(i)
 {
-  const num1 = Math.floor(255 - 42.5 * i);
   const num2 = Math.floor(255 - 42.5 * i);
   const num3 = Math.floor(255 - 42.5 * i);
   let color = `rgb(${num2}, ${num2}, ${num3})`;
@@ -293,6 +311,34 @@ function genPalette(num)
   console.log(result);
   return result;
 }
+
+// toggle settings visibility
+function toggleSettings()
+{
+  const settings = document.getElementById("settings");
+  const visible = settings.style.display == "none" ? false : true;
+  settings.style.display = visible ? "none" : "block";
+}
+
+// Apply settings
+function applySettings()
+{
+  console.log("applying settings");
+  settingsIds.forEach((settingId)=>{
+    settingsObj[settingId] = document.getElementById(settingId).value;
+  });
+  setCanvasSize();
+  clearCanvas();
+}
+
+function fillSettingsUIWithDefaults()
+{
+  settingsIds.forEach((settingId)=>{
+    document.getElementById(settingId).value = settingsObj[settingId];
+  });
+}
+fillSettingsUIWithDefaults();
+
 // ------------------------------------------
 // TEST
 
