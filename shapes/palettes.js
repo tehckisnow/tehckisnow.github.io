@@ -42,5 +42,12 @@ const palettes =
     "#bfabcb",
     "#8d89a6"
     ]
+  },
+  // black only (cut out)
+  {
+    id: "black only",
+    data: [
+      "rgb(0,0,0)"
+    ]
   }
 ];

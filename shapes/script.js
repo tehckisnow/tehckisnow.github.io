@@ -5,6 +5,7 @@
 // tweak default settings for better results
 // add support for random palettes?
 // improve UI (settings looks bad and should be reorganized/straightened)
+// consider implementing gradients (especially subtle radial gradients) and shadows
 
 // -------------------------------------------------------------
 
