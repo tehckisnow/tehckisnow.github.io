@@ -8,11 +8,11 @@
   </head>
   <body>
     <div id="main">
-      <select id="numGen">
-        <option value="1">1</option>
-        <option value="10" selected="selected">10</option>
-        <option value="100">100</option>
-      </select>
+      <span id="numtogen">
+        number to generate: 
+      </span>
+      <input id="numGen" type="number" value="10"></input>
+      
       <button id="generate" onclick="generate()">Generate</button>
       <button id="clear" onclick="clearCanvas()">Clear</button>
       <br>
@@ -23,12 +23,20 @@
       <br>
 
       <div id="settings" style="display: none;">
-        settings not yet fully implemented
-        <br>
-        <button id="applysettings" onclick="applySettings()">apply</button>
-        <br>
+        
+        palette: <select id="paletteselection" onchange="setPaletteFromSelector()"></select>
+
 
         <table>
+          <tr>
+            <td>
+              <button id="applysettings" onclick="applySettings()">apply</button>
+            </td>
+            <td>
+
+            </td>
+          </tr>
+
           <tr>
             <td>
               canvas width: 
@@ -47,14 +55,14 @@
             </td>
           </tr>
 
-          <tr>
+          <!-- <tr>
             <td>
               palette: 
             </td>
             <td>
               <select id="paletteselection" onchange="setPaletteFromSelector()"></select>
             </td>
-          </tr>
+          </tr> -->
 
           <tr>
             <td>

@@ -49,5 +49,16 @@ const palettes =
     data: [
       "rgb(0,0,0)"
     ]
+  },
+  // florescent
+  {
+    id: "florescent",
+    data: [
+      "#ff99c9",
+      "#c1bddb",
+      "#a2c7e5",
+      "#58fcec",
+      "#303a2b"
+    ]
   }
 ];

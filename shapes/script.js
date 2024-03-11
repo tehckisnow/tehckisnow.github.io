@@ -2,12 +2,40 @@
 //// implement backgroundColor
 //// implement settings (mostly done)
 // fix elipse
+// refactor code; 
+//    see "settingsObj" comment below 
 // tweak default settings for better results
 // add support for random palettes?
 //// improve UI (settings looks bad and should be reorganized/straightened)
 // consider implementing gradients (especially subtle radial gradients) and shadows
+// chance of tone fuzzing, hue fuzzing
+// textbox to replace selector
+// bug: sometimes single gen generates multiple shapes (I think this has to do with lines)
 
 // -------------------------------------------------------------
+
+// this is an example format to use for the settings object
+// let settingsObj = 
+// {
+//   list:
+//   [
+//     {
+//       id: "backgroundColorSetting",
+//       label: "background color: ",
+//       value: "black"
+//     },
+//     {}
+//   ],
+//   search: function(){},
+//   build: function(){},
+//   setDefaultSettingsHTML: function(){},
+//   applySettings: function(){}
+// };
+// iterate through list to search for setting
+//      (I would rather have a direct reference to each property, but I am not sure how to design this)
+// dynamically build html table from settings list instead of hardcoded html
+// assign default values for html textareas
+// apply settings from html textareas
 
 let settingsObj =
 {
