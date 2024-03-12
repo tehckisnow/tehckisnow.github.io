@@ -357,7 +357,8 @@ function toggleRandomPalette()
 
 function setRandomPalette()
 {
-  colors = genPalette();
+  const num = document.getElementById("elementsInPalette").value;
+  colors = genPalette(num);
 }
 
 // toggle settings visibility
