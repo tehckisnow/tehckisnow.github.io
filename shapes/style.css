@@ -52,9 +52,12 @@ table {
 
 #numGen {
   margin: 15px;
-  width: 40px;
 }
 
 #numtogen {
   margin: 15px 0 15px 15px;
+}
+
+.numberInput {
+  width: 40px;
 }

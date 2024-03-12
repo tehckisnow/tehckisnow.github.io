@@ -11,10 +11,11 @@
       <span id="numtogen">
         number to generate: 
       </span>
-      <input id="numGen" type="number" value="10"></input>
+      <input id="numGen" type="number" value="10" class="numberInput"></input>
       
       <button id="generate" onclick="generate()">Generate</button>
       <button id="clear" onclick="clearCanvas()">Clear</button>
+      <button id="auto" onclick="toggleAuto()">auto</button>
       <br>
       <canvas id="canvas"></canvas>
       <br>
@@ -26,6 +27,10 @@
         
         palette: <select id="paletteselection" onchange="setPaletteFromSelector()"></select>
 
+        random palette: 
+        <input id="randomPalette" type="checkbox" onchange="toggleRandomPalette()">
+        elements in palette: 
+        <input id="elementsInPalette" type="number" value="5" class="numberInput">
 
         <table>
           <tr>
@@ -52,6 +57,15 @@
             </td>
             <td>
               <textarea id="canvasHeightSetting"></textarea>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              auto speed (milliseconds): 
+            </td>
+            <td>
+              <textarea id="autoSpeedSetting"></textarea>
             </td>
           </tr>
 

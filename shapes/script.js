@@ -5,12 +5,12 @@
 // refactor code; 
 //    see "settingsObj" comment below 
 // tweak default settings for better results
-// add support for random palettes?
+// add support for random palettes (almost finished)
 //// improve UI (settings looks bad and should be reorganized/straightened)
 // consider implementing gradients (especially subtle radial gradients) and shadows
 // chance of tone fuzzing, hue fuzzing
-// textbox to replace selector
-// bug: sometimes single gen generates multiple shapes (I think this has to do with lines)
+//// textbox to replace selector
+//// bug: sometimes single gen generates multiple shapes (I think this has to do with lines)
 
 // -------------------------------------------------------------
 
@@ -37,11 +37,16 @@
 // assign default values for html textareas
 // apply settings from html textareas
 
+let auto = false;
+let useRandomPalette = false;
+
 let settingsObj =
 {
   backgroundColorSetting: "black",
   canvasWidthSetting: 400,
   canvasHeightSetting: 600,
+
+  autoSpeedSetting: 1000,
 
   minRectWidthSetting: 10,
   minRectHeightSetting: 10,
@@ -67,6 +72,7 @@ const settingsIds =
     "backgroundColorSetting",
     "canvasWidthSetting",
     "canvasHeightSetting",
+    "autoSpeedSetting",
     "rotateSetting",
     "maxRotationSetting",
     "minRectWidthSetting",
@@ -156,6 +162,7 @@ function generate()
       const line = genLine();
       drawLine(line.color, line.x, line.y, line.x2, line.y2, line.width);
     }
+    else
     // if circle
     if(percentTest(settingsObj.chanceOfCircleSetting))
     {
@@ -317,11 +324,13 @@ function drawB() {
   }
 }
 
-function genColor(i)
+function genRandomColor()
 {
-  const num2 = Math.floor(255 - 42.5 * i);
-  const num3 = Math.floor(255 - 42.5 * i);
-  let color = `rgb(${num2}, ${num2}, ${num3})`;
+  const num1 = randInc(0, 255);
+  const num2 = randInc(0, 255);
+  const num3 = randInc(0, 255);
+  const color = `rgb(${num1}, ${num2}, ${num3})`;
+  console.log(color);
   return color;
 }
 
@@ -330,14 +339,25 @@ function genPalette(num)
   let result = [];
   for(let i=0; i<num; i++)
   {
-    const rand = randInc(1, 255);
-    result.push(genColor(i * rand));
-    //let color = 'rgb(${Math.floor(255 - 42.5 * i)} ${Math.floor(255 - 42.5 * i)} 0)';
-    // result.push('rgb(${Math.floor(255 - 42.5 * i)} ${Math.floor(255 - 42.5 * i)} 0)');
-    //result.push(color);
+    result.push(genRandomColor());
   }
-  console.log(result);
+  console.log("palette: " + result);
   return result;
+}
+
+function toggleRandomPalette()
+{
+  const element = document.getElementById("randomPalette");
+  useRandomPalette = !useRandomPalette;
+  if(useRandomPalette)
+  {
+    setRandomPalette();
+  }
+}
+
+function setRandomPalette()
+{
+  colors = genPalette();
 }
 
 // toggle settings visibility
@@ -367,11 +387,27 @@ function fillSettingsUIWithDefaults()
 }
 fillSettingsUIWithDefaults();
 
+function toggleAuto()
+{
+  auto = !auto;
+  console.log("auto: " + auto);
+}
+
+function autoGen()
+{
+  if(auto)
+  {
+    generate();
+  }
+  setTimeout(autoGen, settingsObj.autoSpeedSetting);
+}
+autoGen();
+
 // ------------------------------------------
 // TEST
 
 function test()
 {
-  //colors = genPalette(10);
+  colors = genPalette(2);
 }
 test();
