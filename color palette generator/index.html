@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Color Palette Generator</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+  <div id="main">
+
+    <div id="controls">
+      <button id="addcolorbutton" onclick="newColorOnPalette()">Add Color</button>
+      <button id="genpalette" onclick="genPalette()">Generate Palette</button>
+      <button id="clearpalettebutton" onclick="clearPalette()">Clear</button>
+
+        
+        
+
+      <div id="options" class="">
+        <input id="usebasecolorcheckbox" type="checkbox" onchange="toggleUseDominantColor()">
+        <label for="usebasecolorcheckbox">Select dominant color?</label>
+        <input type="color" id="dominantcolorselector">
+
+        <br>
+        <label for="palettesizeinput">Palette Size:</label>
+        <input type="number" id="palettesizeinput" onchange="setPaletteSize(this)" value="5">
+        
+        <hr>
+        Palette type:     
+        <form id="palettetype">
+
+          <input type="radio" id="randompalette" name="palettetype" value="random" onclick="setPaletteType(this)" checked="checked">
+          <label for="randompalette">random</label>
+
+          <input type="radio" id="monochromaticpalette" name="palettetype" value="monochromatic" onclick="setPaletteType(this)">
+          <label for="monochromaticpalette">monochromatic</label>
+
+          <input type="radio" id="complementarypalette" name="palettetype" value="complementary" onclick="setPaletteType(this)">
+          <label for="complementarypalette">complementary</label>
+          
+          <input type="radio" id="splitcomplementarypalette" name="palettetype" value="splitcomplementary" onclick="setPaletteType(this)">
+          <label for="splitcomplementarypalette">split complementary</label>
+
+          <br>
+
+          <input type="radio" id="triadicpalette" name="palettetype" value="triadic" onclick="setPaletteType(this)">
+          <label for="triadicpalette">triadic</label>
+
+          <input type="radio" id="achromaticpalette" name="palettetype" value="achromatic" onclick="setPaletteType(this)">
+          <label for="achromaticpalette">achromatic</label>
+
+          <input type="radio" id="analogouspalette" name="palettetype" value="analogous" onclick="setPaletteType(this)">
+          <label for="analogouspalette">analogous</label>
+
+          <input type="radio" id="tetradicpalette" name="palettetype" value="tetradic" onclick="setPaletteType(this)">
+          <label for="tetradicpalette">tetradic</label>
+
+        </form>
+        <hr>
+
+        <input id="clearaftergencheckbox" type="checkbox" onchange="toggleClearAfterGen()">
+        <label for="clearaftergencheckbox">Clear after generating?</label>
+
+        <br>
+        <form id="colortype">
+          Export color type: 
+          <input type="radio" id="typergb" name="colortype" value="rgb" onclick="getColorType(this)" checked="checked">
+          <label for="typergb">rgb</label>
+          <input type="radio" id="typergba" name="colortype" value="rgba" onclick="getColorType(this)">
+          <label for="typergba">rgba</label>
+
+          <input type="radio" id="typehsl" name="colortype" value="hsl" onclick="getColorType(this)">
+          <label for="typehsl">hsl</label>
+          <input type="radio" id="typehsla" name="colortype" value="hsla" onclick="getColorType(this)">
+          <label for="typehsla">hsla</label>
+
+          <input type="radio" id="typehex" name="colortype" value="hex" onclick="getColorType(this)">
+          <label for="typehex">hex</label>
+        </form>
+
+      </div>
+    </div>
+    <div id="palettecontainer" class="horizontalcontainer"></div>
+    <div id="snackbar">color copied to clipboard</div>
+
+  </div>
+
+  <br><br>
+  <div id="notes">
+    Not yet implemented:<br>
+    - select dominant color<br>
+    - palette types other than random<br>
+    - color type outputs other than rgb<br>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
