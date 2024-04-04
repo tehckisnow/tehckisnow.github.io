@@ -3,7 +3,7 @@
   ---maincolor: rgb(77, 132, 235);
   ---accentcolor: rgb(236, 135, 52);
 
-  ---mainwidth: 800px;
+  ---maxwidth: 20px;
 
   ---palettecontainerheight: 100px;
 }
@@ -59,12 +59,12 @@ input[type=radio] {
 }
 
 #main {
-  width: var(---mainwidth);
+  width: var(---maxwidth);
   margin: auto;
 }
 
 #notes {
-  width: var(---mainwidth);
+  width: var(---maxwidth);
   margin: auto;
 }
 

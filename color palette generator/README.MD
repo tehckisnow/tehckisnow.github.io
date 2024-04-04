@@ -33,4 +33,6 @@ IDEAS:
 
 - rearrange buttons and options to group them more reasonably?
 
-- reformat for mobile devices (responsive design)
+//- reformat for mobile devices (responsive design)
+
+

@@ -1,4 +1,7 @@
 
+const px = "px";
+
+let maxWidth = 800;
 let colorWidth = 50;
 let colorHeight = 50;
 
@@ -14,9 +17,21 @@ let paletteContainer = document.getElementById("palettecontainer");
 // setting CSS variables
 let root = document.querySelector(':root');
 
+let viewport = document.getElementById("viewport");
+window.onresize = setWidth;
+
+// sets the content to the maximum width, or 100% on screens narrower
+function setWidth()
+{
+  let w = "";
+  window.innerWidth < maxWidth ? w = '100%' : w = maxWidth + px;
+  setCSSValue('---maxwidth', w);
+}
+
 function init()
 {
-  setCSSValue('---palettecontainerheight', colorHeight + "px");
+  setCSSValue('---palettecontainerheight', colorHeight + px);
+  setWidth();
 }
 init();
 
@@ -58,8 +73,8 @@ function createColorDiv(color)
 {
   let div = document.createElement("div");
   div.style.backgroundColor = color;
-  div.style.width = colorWidth + "px";
-  div.style.height = colorHeight + "px";
+  div.style.width = colorWidth + px;
+  div.style.height = colorHeight + px;
   div.setAttribute('class', 'color');
   div.setAttribute('onclick', 'getColorValue(this)');
   return div;
